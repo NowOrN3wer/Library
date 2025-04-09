@@ -1,4 +1,5 @@
-﻿using GenericRepository;
+﻿using CArch.Domain.Entities;
+using GenericRepository;
 using Library.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,7 +12,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRo
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
-
+    public DbSet<ApiLog> ApiLogs { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
