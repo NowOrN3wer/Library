@@ -89,6 +89,8 @@ app.UseHttpsRedirection();
 
 app.UseResponseCompression();
 
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
 app.UseCors();
 
 app.UseAuthentication();

@@ -1,5 +1,4 @@
-﻿using CArch.Domain.Entities;
-using GenericRepository;
+﻿using GenericRepository;
 using Library.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

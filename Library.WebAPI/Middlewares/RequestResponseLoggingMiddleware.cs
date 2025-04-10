@@ -1,25 +1,19 @@
-﻿using CArch.Domain.Entities;
-using Library.Infrastructure.Context;
+﻿using Library.Infrastructure.Context;
 using Newtonsoft.Json;
 using System.Text.Json;
+using Library.Domain.Entities;
 
 namespace Library.WebAPI.Middlewares;
-public class RequestResponseLoggingMiddleware
+
+public class RequestResponseLoggingMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public RequestResponseLoggingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task Invoke(HttpContext context, ApplicationDbContext dbContext)
     {
-        var requestTime = DateTime.Now;
+        var requestTime = DateTimeOffset.UtcNow;
         var request = context.Request;
         var originalBodyStream = context.Response.Body;
 
-        string requestBodyText = "";
+        var requestBodyText = string.Empty;
         if (request.ContentLength > 0 && request.Body.CanRead)
         {
             request.EnableBuffering();
@@ -31,7 +25,7 @@ public class RequestResponseLoggingMiddleware
         using var responseBody = new MemoryStream();
         context.Response.Body = responseBody;
 
-        await _next(context); // request pipeline’a devam et
+        await next(context); // request pipeline’a devam et
 
         context.Response.Body.Seek(0, SeekOrigin.Begin);
         var responseText = await new StreamReader(context.Response.Body).ReadToEndAsync();
@@ -46,7 +40,7 @@ public class RequestResponseLoggingMiddleware
             ResponseBody = ToJsonSafe(responseText),
             StatusCode = context.Response.StatusCode,
             RequestTime = requestTime,
-            ResponseTime = DateTime.Now
+            ResponseTime = DateTimeOffset.UtcNow // 🔁 Uygun şekilde düzeltildi
         };
 
         dbContext.ApiLogs.Add(log);
@@ -55,11 +49,12 @@ public class RequestResponseLoggingMiddleware
         await responseBody.CopyToAsync(originalBodyStream);
     }
 
-
-    private string ToJsonSafe(string? input)
+    private static string ToJsonSafe(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
-            return "null"; // veya "{}"
+        {
+            return "null";
+        }
 
         try
         {

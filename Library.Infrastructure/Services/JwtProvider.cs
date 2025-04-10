@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Library.Application.Common;
+using Library.Application.Extensions;
 using Library.Application.Features.Auth.Login;
 using Library.Application.Services;
 using Library.Domain.Entities;
@@ -9,48 +11,47 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Library.Infrastructure.Services
+namespace Library.Infrastructure.Services;
+
+internal class JwtProvider(
+    UserManager<AppUser> userManager,
+    IOptions<JwtOptions> jwtOptions,
+    ITimeService timeService) : IJwtProvider
 {
-    internal class JwtProvider(
-        UserManager<AppUser> userManager,
-        IOptions<JwtOptions> jwtOptions) : IJwtProvider
+    public async Task<LoginCommandResponse> CreateToken(AppUser user)
     {
-        public async Task<LoginCommandResponse> CreateToken(AppUser user)
+        List<Claim> claims = new()
         {
-            List<Claim> claims = new()
-            {
-                new Claim("Id", user.Id.ToString()),
-                new Claim("Name", user.FullName),
-                new Claim("Email", user.Email ?? ""),
-                new Claim("UserName", user.UserName ?? "")
-            };
+            new Claim("Id", user.Id.ToString()),
+            new Claim("Name", user.FullName),
+            new Claim("Email", user.Email ?? ""),
+            new Claim("UserName", user.UserName ?? "")
+        };
 
-            DateTime expires = DateTime.UtcNow.AddMonths(1);
+        var now = timeService.UtcNow;
+        var expires = now.AddHours(1);
+        var refreshTokenExpires = expires.AddHours(1);
 
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
+        JwtSecurityToken jwtSecurityToken = new(
+            issuer: jwtOptions.Value.Issuer,
+            audience: jwtOptions.Value.Audience,
+            claims: claims,
+            notBefore: now.UtcDateTime,
+            expires: expires.UtcDateTime,
+            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
 
-            JwtSecurityToken jwtSecurityToken = new(
-                issuer: jwtOptions.Value.Issuer,
-                audience: jwtOptions.Value.Audience,
-                claims: claims,
-                notBefore: DateTime.UtcNow,
-                expires: expires,
-                signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
+        JwtSecurityTokenHandler handler = new();
+        var token = handler.WriteToken(jwtSecurityToken);
 
-            JwtSecurityTokenHandler handler = new();
+        var refreshToken = Guid.NewGuid().ToString();
 
-            string token = handler.WriteToken(jwtSecurityToken);
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpires = refreshTokenExpires;
 
-            string refreshToken = Guid.NewGuid().ToString();
-            DateTime refreshTokenExpires = expires.AddHours(1);
+        await userManager.UpdateAsync(user);
 
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpires = refreshTokenExpires;
-
-            await userManager.UpdateAsync(user);
-
-            return new(token, refreshToken, refreshTokenExpires);
-        }
+        return new LoginCommandResponse(token, refreshToken, refreshTokenExpires.ToTurkeyTime());
     }
 }
