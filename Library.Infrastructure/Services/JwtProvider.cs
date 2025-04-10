@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Library.Application.Common;
+using Library.Application.Common.Interfaces;
 using Library.Application.Extensions;
 using Library.Application.Features.Auth.Login;
 using Library.Application.Services;

@@ -1,4 +1,4 @@
-namespace Library.Application.Common;
+namespace Library.Application.Common.Interfaces;
 
 public interface ITimeService
 {

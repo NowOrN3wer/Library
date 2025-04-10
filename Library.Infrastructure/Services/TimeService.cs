@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using Library.Application.Common;
+using Library.Application.Common.Interfaces;
 
 namespace Library.Infrastructure.Services;
 
