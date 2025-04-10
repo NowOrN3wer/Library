@@ -7,12 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.WebAPI.Controllers;
 
 [AllowAnonymous]
-public sealed class AuthController : ApiController
+public sealed class AuthController(IMediator mediator) : ApiController(mediator)
 {
-    public AuthController(IMediator mediator) : base(mediator)
-    {
-    }
-
     [HttpPost]
     public async Task<IActionResult> Login(LoginCommand request, CancellationToken cancellationToken)
     {
