@@ -11,7 +11,9 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRo
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
+
     public DbSet<ApiLog> ApiLogs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);

@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
 
-namespace Library.Application.Mapping
-{
-    public sealed class MappingProfile : Profile
-    {
-        public MappingProfile()
-        {
+namespace Library.Application.Mapping;
 
-        }
-    }
+public sealed class MappingProfile : Profile
+{
 }

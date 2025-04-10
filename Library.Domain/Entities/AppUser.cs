@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Library.Domain.Entities
+namespace Library.Domain.Entities;
+
+public sealed class AppUser : IdentityUser<Guid>
 {
-    public sealed class AppUser : IdentityUser<Guid>
-    {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string FullName => string.Join(" ", FirstName, LastName);
-        public string? RefreshToken { get; set; }
-        public DateTimeOffset? RefreshTokenExpires { get; set; }
-    }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string FullName => string.Join(" ", FirstName, LastName);
+    public string? RefreshToken { get; set; }
+    public DateTimeOffset? RefreshTokenExpires { get; set; }
 }

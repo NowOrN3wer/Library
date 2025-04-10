@@ -8,8 +8,8 @@ namespace Library.Infrastructure.Common;
 
 public class UnitOfWorkWithTransaction : IUnitOfWorkWithTransaction
 {
-    private readonly IUnitOfWork _innerUnitOfWork;
     private readonly ApplicationDbContext _context;
+    private readonly IUnitOfWork _innerUnitOfWork;
     private IDbContextTransaction? _transaction;
 
     public UnitOfWorkWithTransaction(IUnitOfWork innerUnitOfWork, ApplicationDbContext context)
@@ -18,7 +18,10 @@ public class UnitOfWorkWithTransaction : IUnitOfWorkWithTransaction
         _context = context;
     }
 
-    public async Task BeginTransactionAsync() => _transaction = await _context.Database.BeginTransactionAsync();
+    public async Task BeginTransactionAsync()
+    {
+        _transaction = await _context.Database.BeginTransactionAsync();
+    }
 
     public async Task CommitTransactionAsync()
     {
@@ -48,10 +51,15 @@ public class UnitOfWorkWithTransaction : IUnitOfWorkWithTransaction
         }
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        _innerUnitOfWork.SaveChangesAsync(cancellationToken);
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return _innerUnitOfWork.SaveChangesAsync(cancellationToken);
+    }
 
-    public int SaveChanges() => _innerUnitOfWork.SaveChanges();
+    public int SaveChanges()
+    {
+        return _innerUnitOfWork.SaveChanges();
+    }
 
     public async Task<bool> SaveChangesAndReturnSuccessAsync(CancellationToken cancellationToken = default)
     {

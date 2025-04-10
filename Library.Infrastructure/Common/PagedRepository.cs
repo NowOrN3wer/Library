@@ -2,8 +2,8 @@ using System.Linq.Expressions;
 using GenericRepository;
 using Library.Domain.Common;
 using Library.Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.Common;
 
@@ -24,17 +24,12 @@ public class PagedRepository<T>(ApplicationDbContext context)
 
         var query = _context.Set<T>().AsExpandable();
 
-        if (filter is not null)
-        {
-            query = query.Where(filter);
-        }
+        if (filter is not null) query = query.Where(filter);
 
         if (orderBy is not null)
-        {
             query = isDescending
                 ? query.OrderByDescending(orderBy)
                 : query.OrderBy(orderBy);
-        }
 
         var totalCount = await query.CountAsync();
 

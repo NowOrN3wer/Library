@@ -13,8 +13,8 @@ public class TimeService : ITimeService
     private static TimeZoneInfo GetTurkeyTimeZone()
     {
         var timeZoneId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? "Turkey Standard Time"       // Windows
-            : "Europe/Istanbul";           // Linux/macOS
+            ? "Turkey Standard Time" // Windows
+            : "Europe/Istanbul"; // Linux/macOS
 
         try
         {
@@ -22,7 +22,8 @@ public class TimeService : ITimeService
         }
         catch (TimeZoneNotFoundException)
         {
-            throw new InvalidOperationException($"'{timeZoneId}' saat dilimi bulunamadı. Lütfen sistem saat dilimini kontrol edin.");
+            throw new InvalidOperationException(
+                $"'{timeZoneId}' saat dilimi bulunamadı. Lütfen sistem saat dilimini kontrol edin.");
         }
     }
 }

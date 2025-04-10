@@ -1,11 +1,11 @@
-﻿namespace Library.Domain.Abstractions
+﻿namespace Library.Domain.Abstractions;
+
+public abstract class Entity
 {
-    public abstract class Entity
+    protected Entity()
     {
-        public Guid Id { get; set; }
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-        }
+        Id = Guid.NewGuid();
     }
+
+    public Guid Id { get; set; }
 }

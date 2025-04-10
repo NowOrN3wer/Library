@@ -1,7 +1,7 @@
-﻿using Library.Infrastructure.Context;
-using Newtonsoft.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Library.Domain.Entities;
+using Library.Infrastructure.Context;
+using Newtonsoft.Json;
 
 namespace Library.WebAPI.Middlewares;
 
@@ -51,10 +51,7 @@ public class RequestResponseLoggingMiddleware(RequestDelegate next)
 
     private static string ToJsonSafe(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input))
-        {
-            return "null";
-        }
+        if (string.IsNullOrWhiteSpace(input)) return "null";
 
         try
         {

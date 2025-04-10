@@ -17,10 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddResponseCompression(options =>
-{
-    options.EnableForHttps = true;
-});
+builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
 
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
@@ -29,10 +26,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddControllers().AddOData(action =>
-{
-    action.EnableQueryFeatures();
-});
+builder.Services.AddControllers().AddOData(action => { action.EnableQueryFeatures(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setup =>
 {
@@ -55,9 +49,9 @@ builder.Services.AddSwaggerGen(setup =>
     setup.AddSecurityDefinition(jwtSecuritySheme.Reference.Id, jwtSecuritySheme);
 
     setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecuritySheme, Array.Empty<string>() }
-                });
+    {
+        { jwtSecuritySheme, Array.Empty<string>() }
+    });
 });
 
 builder.Services.AddRateLimiter(options =>
@@ -112,7 +106,7 @@ app.MapHealthChecks("/health-check", new HealthCheckOptions
     {
         [HealthStatus.Healthy] = StatusCodes.Status200OK,
         [HealthStatus.Degraded] = StatusCodes.Status200OK,
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
     }
 });
 

@@ -35,12 +35,12 @@ internal class JwtProvider(
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
 
         JwtSecurityToken jwtSecurityToken = new(
-            issuer: jwtOptions.Value.Issuer,
-            audience: jwtOptions.Value.Audience,
-            claims: claims,
-            notBefore: now.UtcDateTime,
-            expires: expires.UtcDateTime,
-            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
+            jwtOptions.Value.Issuer,
+            jwtOptions.Value.Audience,
+            claims,
+            now.UtcDateTime,
+            expires.UtcDateTime,
+            new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
 
         JwtSecurityTokenHandler handler = new();
         var token = handler.WriteToken(jwtSecurityToken);
