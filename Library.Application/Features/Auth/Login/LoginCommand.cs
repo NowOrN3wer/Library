@@ -1,9 +1,8 @@
 ﻿using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Auth.Login
-{
-    public sealed record LoginCommand(
-        string EmailOrUserName,
-        string Password) : IRequest<Result<LoginCommandResponse>>;
-}
+namespace Library.Application.Features.Auth.Login;
+
+public sealed record LoginCommand(
+    string EmailOrUserName,
+    string Password) : IRequest<Result<LoginCommandResponse>>;

@@ -16,6 +16,7 @@ public sealed class JwtTokenOptionsSetup(
         options.TokenValidationParameters.ValidateIssuerSigningKey = true;
         options.TokenValidationParameters.ValidIssuer = jwtOptions.Value.Issuer;
         options.TokenValidationParameters.ValidAudience = jwtOptions.Value.Audience;
-        options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
+        options.TokenValidationParameters.IssuerSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
     }
 }

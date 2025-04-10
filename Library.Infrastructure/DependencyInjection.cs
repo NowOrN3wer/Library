@@ -20,9 +20,9 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-            .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention();
         });
-        
+
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
 
         services
@@ -53,19 +53,19 @@ public static class DependencyInjection
         services.Scan(action =>
         {
             action
-            .FromAssemblies(Assembly.GetExecutingAssembly())
-            .AddClasses(publicOnly: false)
-            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
-            .AsMatchingInterface()
-            .AsImplementedInterfaces()
-            .WithScopedLifetime();
+                .FromAssemblies(Assembly.GetExecutingAssembly())
+                .AddClasses(false)
+                .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+                .AsMatchingInterface()
+                .AsImplementedInterfaces()
+                .WithScopedLifetime();
         });
 
 
         services.AddHealthChecks()
-        .AddCheck("health-check", () => HealthCheckResult.Healthy())
-        .AddDbContextCheck<ApplicationDbContext>()
-        ;
+            .AddCheck("health-check", () => HealthCheckResult.Healthy())
+            .AddDbContextCheck<ApplicationDbContext>()
+            ;
 
         return services;
     }

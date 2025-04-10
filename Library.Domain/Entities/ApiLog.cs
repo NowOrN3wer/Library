@@ -1,4 +1,4 @@
-﻿namespace CArch.Domain.Entities;
+﻿namespace Library.Domain.Entities;
 
 public sealed class ApiLog
 {
@@ -9,6 +9,6 @@ public sealed class ApiLog
     public string? RequestBody { get; set; }
     public string? ResponseBody { get; set; }
     public int StatusCode { get; set; }
-    public DateTime RequestTime { get; set; }
-    public DateTime ResponseTime { get; set; }
+    public DateTimeOffset RequestTime { get; set; }
+    public DateTimeOffset ResponseTime { get; set; }
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250409194249_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250410171858_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,54 @@ namespace Library.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Library.Domain.Entities.ApiLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("IPAddress")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("ip_address");
+
+                    b.Property<string>("Method")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("method");
+
+                    b.Property<string>("Path")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("path");
+
+                    b.Property<string>("RequestBody")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("request_body");
+
+                    b.Property<DateTimeOffset>("RequestTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("request_time");
+
+                    b.Property<string>("ResponseBody")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("response_body");
+
+                    b.Property<DateTimeOffset>("ResponseTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("response_time");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("integer")
+                        .HasColumnName("status_code");
+
+                    b.HasKey("Id")
+                        .HasName("pk_api_logs");
+
+                    b.ToTable("api_logs", (string)null);
+                });
 
             modelBuilder.Entity("Library.Domain.Entities.AppUser", b =>
                 {
@@ -90,7 +138,7 @@ namespace Library.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("refresh_token");
 
-                    b.Property<DateTime?>("RefreshTokenExpires")
+                    b.Property<DateTimeOffset?>("RefreshTokenExpires")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("refresh_token_expires");
 

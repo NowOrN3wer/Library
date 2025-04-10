@@ -6,11 +6,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Library.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "api_logs",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ip_address = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    path = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    method = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    request_body = table.Column<string>(type: "jsonb", nullable: true),
+                    response_body = table.Column<string>(type: "jsonb", nullable: true),
+                    status_code = table.Column<int>(type: "integer", nullable: false),
+                    request_time = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    response_time = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_api_logs", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "roles",
                 columns: table => new
@@ -33,7 +52,7 @@ namespace Library.Infrastructure.Migrations
                     first_name = table.Column<string>(type: "varchar(50)", nullable: false),
                     last_name = table.Column<string>(type: "varchar(50)", nullable: false),
                     refresh_token = table.Column<string>(type: "text", nullable: true),
-                    refresh_token_expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    refresh_token_expires = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     user_name = table.Column<string>(type: "text", nullable: true),
                     normalized_user_name = table.Column<string>(type: "text", nullable: true),
                     email = table.Column<string>(type: "text", nullable: true),
@@ -58,6 +77,9 @@ namespace Library.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "api_logs");
+
             migrationBuilder.DropTable(
                 name: "roles");
 
