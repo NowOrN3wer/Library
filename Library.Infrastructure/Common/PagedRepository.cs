@@ -1,11 +1,11 @@
 using System.Linq.Expressions;
 using GenericRepository;
-using Library.Domain.Repositories;
+using Library.Domain.Common;
 using Library.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
 
-namespace Library.Infrastructure.Repositories;
+namespace Library.Infrastructure.Common;
 
 public class PagedRepository<T>(ApplicationDbContext context)
     : Repository<T, ApplicationDbContext>(context), IPagedRepository<T>

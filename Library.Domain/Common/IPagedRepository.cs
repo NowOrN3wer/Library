@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using GenericRepository;
 
-namespace Library.Domain.Repositories;
+namespace Library.Domain.Common;
 
 public interface IPagedRepository<T> : IRepository<T> where T : class
 {
