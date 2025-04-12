@@ -2,7 +2,6 @@ using AutoMapper;
 using Library.Application.Dto.ApiLogDTOs;
 using Library.Application.Extensions;
 using Library.Domain.Entities;
-using Newtonsoft.Json.Linq;
 
 namespace Library.Application.Mapping.ApiLogProfiles;
 
@@ -29,22 +28,5 @@ public sealed class ApiLogProfiles : Profile
                 opt => opt.MapFrom(src => src.ResponseBody))
             .ForMember(dest => dest.statusCode,
                 opt => opt.MapFrom(src => src.StatusCode));
-    }
-
-    private static object? ParseJsonOrRaw(string? json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return null;
-        }
-
-        try
-        {
-            return JToken.Parse(json);
-        }
-        catch
-        {
-            return json;
-        }
     }
 }

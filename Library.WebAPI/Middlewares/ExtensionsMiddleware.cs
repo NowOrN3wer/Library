@@ -7,23 +7,19 @@ public static class ExtensionsMiddleware
 {
     public static void CreateFirstUser(WebApplication app)
     {
-        using (var scoped = app.Services.CreateScope())
+        using var scoped = app.Services.CreateScope();
+        var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+        if (userManager.Users.Any(p => p.UserName == "admin")) return;
+        AppUser user = new()
         {
-            var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+            UserName = "admin",
+            Email = "admin@admin.com",
+            FirstName = "admin",
+            LastName = "admin",
+            EmailConfirmed = true
+        };
 
-            if (!userManager.Users.Any(p => p.UserName == "admin"))
-            {
-                AppUser user = new()
-                {
-                    UserName = "admin",
-                    Email = "admin@admin.com",
-                    FirstName = "admin",
-                    LastName = "admin",
-                    EmailConfirmed = true
-                };
-
-                userManager.CreateAsync(user, "1").Wait();
-            }
-        }
+        userManager.CreateAsync(user, "1").Wait();
     }
 }
