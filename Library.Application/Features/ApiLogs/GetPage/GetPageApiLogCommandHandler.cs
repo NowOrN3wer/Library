@@ -38,7 +38,7 @@ public sealed class GetPageApiLogCommandHandler(IApiLogRepository repository, IM
             filter = filter.And(x => x.StatusCode == request.statusCode.Value);
         }
 
-        if (request.startTime.HasValue && request.endTime.HasValue)
+        if (request is { startTime: not null, endTime: not null })
         {
             filter = filter.And(x =>
                 x.RequestTime >= request.startTime.Value && x.RequestTime <= request.endTime.Value);
