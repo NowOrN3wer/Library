@@ -24,9 +24,9 @@ public sealed class ApiLogProfiles : Profile
             .ForMember(dest => dest.method,
                 opt => opt.MapFrom(src => src.Method))
             .ForMember(dest => dest.requestBody,
-                opt => opt.MapFrom(src => ParseJsonOrRaw(src.RequestBody)))
+                opt => opt.MapFrom(src => src.RequestBody))
             .ForMember(dest => dest.responseBody,
-                opt => opt.MapFrom(src => ParseJsonOrRaw(src.ResponseBody)))
+                opt => opt.MapFrom(src => src.ResponseBody))
             .ForMember(dest => dest.statusCode,
                 opt => opt.MapFrom(src => src.StatusCode));
     }
