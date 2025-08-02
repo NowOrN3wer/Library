@@ -31,19 +31,19 @@ public class RequestResponseLoggingMiddleware(RequestDelegate next)
         var responseText = await new StreamReader(context.Response.Body).ReadToEndAsync();
         context.Response.Body.Seek(0, SeekOrigin.Begin);
 
-        var log = new ApiLog
-        {
-            IPAddress = context.Connection.RemoteIpAddress?.ToString(),
-            Path = request.Path,
-            Method = request.Method,
-            RequestBody = ToJsonSafe(requestBodyText),
-            ResponseBody = ToJsonSafe(responseText),
-            StatusCode = context.Response.StatusCode,
-            RequestTime = requestTime,
-            ResponseTime = DateTimeOffset.UtcNow // 🔁 Uygun şekilde düzeltildi
-        };
+        //var log = new ApiLog
+        //{
+        //    IPAddress = context.Connection.RemoteIpAddress?.ToString(),
+        //    Path = request.Path,
+        //    Method = request.Method,
+        //    RequestBody = ToJsonSafe(requestBodyText),
+        //    ResponseBody = ToJsonSafe(responseText),
+        //    StatusCode = context.Response.StatusCode,
+        //    RequestTime = requestTime,
+        //    ResponseTime = DateTimeOffset.UtcNow // 🔁 Uygun şekilde düzeltildi
+        //};
 
-        dbContext.ApiLogs.Add(log);
+        //dbContext.ApiLogs.Add(log);
         await dbContext.SaveChangesAsync();
 
         await responseBody.CopyToAsync(originalBodyStream);

@@ -9,6 +9,7 @@ public abstract class BasePageResponseDto<T>
     public int totalPages => (int)Math.Ceiling((double)totalCount / pageSize);
     public bool hasNextPage => pageNumber < totalPages;
     public bool hasPreviousPage => pageNumber > 1;
-    public string? OrderByField { get; set; }
-    public bool OrderByAsc { get; set; }
+    public string? orderByField { get; set; }
+    public bool orderByAsc { get; set; }
+    public bool getAllData { get; set; }
 }

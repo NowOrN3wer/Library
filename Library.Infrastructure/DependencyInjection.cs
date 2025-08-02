@@ -64,8 +64,7 @@ public static class DependencyInjection
 
         services.AddHealthChecks()
             .AddCheck("health-check", () => HealthCheckResult.Healthy())
-            .AddDbContextCheck<ApplicationDbContext>()
-            ;
+            .AddDbContextCheck<ApplicationDbContext>();
 
         return services;
     }

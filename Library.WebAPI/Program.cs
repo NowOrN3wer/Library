@@ -1,104 +1,94 @@
-using System.Threading.RateLimiting;
+﻿using System.Threading.RateLimiting;
 using DefaultCorsPolicyNugetPackage;
 using HealthChecks.UI.Client;
 using Library.Application;
 using Library.Infrastructure;
 using Library.Infrastructure.Context;
 using Library.WebAPI.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 🌍 Config
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddResponseCompression(options => { options.EnableForHttps = true; });
-
+// ➕ Services
+builder.Services.AddResponseCompression(o => o.EnableForHttps = true);
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddControllers().AddOData(action => { action.EnableQueryFeatures(); });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(setup =>
-{
-    var jwtSecuritySheme = new OpenApiSecurityScheme
-    {
-        BearerFormat = "JWT",
-        Name = "JWT Authentication",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Description = "Put **_ONLY_** yourt JWT Bearer token on textbox below!",
+// 📦 OData + Controllers
+builder.Services.AddControllers().AddOData(opt => opt.EnableQueryFeatures());
 
-        Reference = new OpenApiReference
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-
-    setup.AddSecurityDefinition(jwtSecuritySheme.Reference.Id, jwtSecuritySheme);
-
-    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { jwtSecuritySheme, Array.Empty<string>() }
-    });
-});
-
+// 🛡️ Rate Limit
 builder.Services.AddRateLimiter(options =>
 {
-    options.AddFixedWindowLimiter("fixed", options =>
+    options.AddFixedWindowLimiter("fixed", config =>
     {
-        options.QueueLimit = 100;
-        options.PermitLimit = 100;
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        options.Window = TimeSpan.FromSeconds(1);
+        config.PermitLimit = 100;
+        config.QueueLimit = 100;
+        config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        config.Window = TimeSpan.FromSeconds(1);
     });
 });
 
+// 🔍 Scalar + OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi(); // Scalar için mutlaka lazım
+
+// 🩺 HealthChecks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>("PostgreSQL", HealthStatus.Unhealthy);
+
+builder.Services.AddHealthChecksUI(setup =>
+{
+    setup.AddHealthCheckEndpoint("Library API", "/health-check");
+}).AddInMemoryStorage();
+
+// ✅ Build
 var app = builder.Build();
 
+// 🧱 DB Migrate
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.Migrate();
 }
 
+// 🧪 DevTools
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();             // ➜ /openapi.json
+    app.MapScalarApiReference();  // ➜ /reference
 }
 
+//// ✅ Scalar çalışabilmesi için en az bir endpoint tanımı
+//app.MapGet("/", () => "Scalar çalışıyor!")
+//   .WithName("Root")
+//   .WithOpenApi(); // ❗ bu satır olmadan Scalar interface boş olur
+
+// ⚙️ Middleware
 app.UseHttpsRedirection();
-
 app.UseResponseCompression();
-
-app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
 app.UseCors();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.UseRateLimiter();
-
 app.UseExceptionHandler();
 
-app.MapControllers().RequireRateLimiting("fixed").RequireAuthorization();
+app.MapControllers()
+   .RequireAuthorization()
+   .RequireRateLimiting("fixed");
 
-ExtensionsMiddleware.CreateFirstUser(app);
-
+// 🩺 HealthCheck endpoints
 app.MapHealthChecks("/health-check", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
@@ -110,4 +100,14 @@ app.MapHealthChecks("/health-check", new HealthCheckOptions
     }
 });
 
+app.MapHealthChecksUI(options =>
+{
+    options.UIPath = "/health-ui";
+    options.ApiPath = "/health-ui-api";
+});
+
+// 👤 İlk kullanıcıyı oluştur
+ExtensionsMiddleware.CreateFirstUser(app);
+
+// 🚀 Başlat
 app.Run();

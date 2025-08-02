@@ -4,7 +4,7 @@ using Library.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore.Storage;
 using TS.Result;
 
-namespace Library.Infrastructure.Common;
+namespace Library.Infrastructure.Persistence.Services;
 
 public class UnitOfWorkWithTransaction(IUnitOfWork innerUnitOfWork, ApplicationDbContext context)
     : IUnitOfWorkWithTransaction
