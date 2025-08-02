@@ -3,12 +3,14 @@ using TS.Result;
 
 namespace Library.Application.Features.Writers.Add;
 
-public sealed record AddWriterCommand(
-    string firstName,
-    string? lastName,
-    string? biography,
-    string? nationality,
-    DateTimeOffset? birthDate,
-    DateTimeOffset? deathDate,
-    string? website,
-    string? email) : IRequest<Result<bool>>;
+public sealed record class AddWriterCommand : IRequest<Result<bool>>
+{
+    public string firstName { get; init; } = default!;
+    public string? lastName { get; init; }
+    public string? biography { get; init; }
+    public string? nationality { get; init; }
+    public DateTimeOffset? birthDate { get; init; }
+    public DateTimeOffset? deathDate { get; init; }
+    public string? website { get; init; }
+    public string? email { get; init; }
+}

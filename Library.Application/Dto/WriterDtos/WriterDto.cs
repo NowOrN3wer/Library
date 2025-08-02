@@ -3,13 +3,13 @@
 namespace Library.Application.Dto.WriterDtos;
 
 public sealed record WriterDto(
-    string firstName,
-    string? lastName,
-    string? biography,
-    string? nationality,
-    DateTimeOffset? birthDate,
-    DateTimeOffset? deathDate,
-    string? website,
-    string? email
+    string FirstName,
+    string? LastName,
+    string? Biography,
+    string? Nationality,
+    DateTimeOffset? BirthDate,
+    DateTimeOffset? DeathDate,
+    string? Website,
+    string? Email
 ) : EntityDto;
 

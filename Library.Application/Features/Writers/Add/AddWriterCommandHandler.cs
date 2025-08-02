@@ -1,4 +1,5 @@
 ﻿using Library.Application.Common.Interfaces;
+using Library.Application.SeedData;
 using Library.Domain.Entities;
 using Library.Domain.Repositories;
 using Mapster;
@@ -13,6 +14,37 @@ internal sealed class AddWriterCommandHandler(
 {
     public async Task<Result<bool>> Handle(AddWriterCommand request, CancellationToken cancellationToken)
     {
+
+        int total = 1_000_000;
+        int batchSize = 10000;
+        var faker = WriterFaker.GetFaker(); // Faker<WriterDto>
+
+        for (int i = 0; i < total / batchSize; i++)
+        {
+            var batch = Enumerable.Range(0, batchSize)
+                .Select(_ =>
+                {
+                    var dto = faker.Generate(); // WriterDto
+                    return new AddWriterCommand(
+                        dto.firstName,
+                        dto.lastName,
+                        dto.biography,
+                        dto.nationality,
+                        dto.birthDate,
+                        dto.deathDate,
+                        dto.website,
+                        dto.email
+                    );
+                })
+                .Select(cmd => cmd.Adapt<Writer>()) // Mapster ile
+                .ToList();
+
+            await repository.AddRangeAsync(batch);
+            await unitOfWork.SaveChangesAsync();
+
+            Console.WriteLine($"Inserted {batchSize} writers");
+        }
+
         var writer = request.Adapt<Writer>();
         repository.Add(writer);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync();

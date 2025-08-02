@@ -1,5 +1,4 @@
-﻿using System.Threading.RateLimiting;
-using DefaultCorsPolicyNugetPackage;
+﻿using DefaultCorsPolicyNugetPackage;
 using HealthChecks.UI.Client;
 using Library.Application;
 using Library.Infrastructure;
@@ -11,6 +10,8 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,12 @@ builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // 📦 OData + Controllers
-builder.Services.AddControllers().AddOData(opt => opt.EnableQueryFeatures());
+builder.Services.AddControllers()
+    .AddOData(opt => opt.EnableQueryFeatures())
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 // 🛡️ Rate Limit
 builder.Services.AddRateLimiter(options =>
