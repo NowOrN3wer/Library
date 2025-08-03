@@ -12,4 +12,3 @@ public sealed record WriterDto(
     string? Website,
     string? Email
 ) : EntityDto;
-
