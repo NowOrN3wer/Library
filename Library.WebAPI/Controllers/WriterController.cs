@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.WebAPI.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class WriterController(IMediator mediator) : ApiController(mediator)
 {
     [HttpPost]
