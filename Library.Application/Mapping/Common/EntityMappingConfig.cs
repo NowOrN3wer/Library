@@ -10,23 +10,23 @@ internal sealed class EntityMappingConfig : IRegister
     {
         // Entity → EntityDto
         config.NewConfig<Entity, EntityDto>()
-            .Map(dest => dest.id, src => src.Id)
-            .Map(dest => dest.version, src => src.Version)
-            .Map(dest => dest.createdBy, src => src.CreatedBy)
-            .Map(dest => dest.updatedBy, src => src.UpdatedBy)
-            .Map(dest => dest.createdAt, src => src.CreatedAt)
-            .Map(dest => dest.updatedAt, src => src.UpdatedAt)
-            .Map(dest => dest.isDeleted, src => src.IsDeleted);
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Version, src => src.Version)
+            .Map(dest => dest.CreatedBy, src => src.CreatedBy)
+            .Map(dest => dest.UpdatedBy, src => src.UpdatedBy)
+            .Map(dest => dest.CreatedAt, src => src.CreatedAt)
+            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
+            .Map(dest => dest.IsDeleted, src => src.IsDeleted);
 
         // EntityDto → Entity
         config.NewConfig<EntityDto, Entity>()
-            .Map(dest => dest.Id, src => src.id)
-            .Map(dest => dest.Version, src => src.version)
-            .Map(dest => dest.CreatedBy, src => src.createdBy)
-            .Map(dest => dest.UpdatedBy, src => src.updatedBy)
-            .Map(dest => dest.CreatedAt, src => src.createdAt)
-            .Map(dest => dest.UpdatedAt, src => src.updatedAt)
-            .Map(dest => dest.IsDeleted, src => src.isDeleted);
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Version, src => src.Version)
+            .Map(dest => dest.CreatedBy, src => src.CreatedBy)
+            .Map(dest => dest.UpdatedBy, src => src.UpdatedBy)
+            .Map(dest => dest.CreatedAt, src => src.CreatedAt)
+            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
+            .Map(dest => dest.IsDeleted, src => src.IsDeleted);
     }
 }
 
