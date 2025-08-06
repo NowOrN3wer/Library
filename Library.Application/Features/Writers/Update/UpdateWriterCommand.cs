@@ -1,11 +1,12 @@
-﻿using MediatR;
+using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Writers.Add;
+namespace Library.Application.Features.Writers.Update;
 
-public sealed record AddWriterCommand : IRequest<Result<bool>>
+public sealed record UpdateWriterCommand : IRequest<Result<bool>>
 {
-    public required string FirstName { get; init; }
+    public required Guid Id { get; set; }
+    public string? FirstName { get; init; }
     public string? LastName { get; init; }
     public string? Biography { get; init; }
     public string? Nationality { get; init; }

@@ -5,12 +5,7 @@ namespace Library.WebAPI.Abstractions;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public abstract class ApiController : ControllerBase
+public abstract class ApiController(IMediator mediator) : ControllerBase
 {
-    public readonly IMediator _mediator;
-
-    protected ApiController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    protected readonly IMediator _mediator = mediator;
 }

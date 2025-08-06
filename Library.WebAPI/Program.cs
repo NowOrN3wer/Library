@@ -13,6 +13,7 @@ using Scalar.AspNetCore;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 🌍 Config
@@ -59,15 +60,18 @@ builder.Services.AddHealthChecksUI(setup =>
     setup.AddHealthCheckEndpoint("Library API", "/health-check");
 }).AddInMemoryStorage();
 
+// 📦 APM middleware'i → bunu AddControllers’dan önce değil, sonra koyabilirsin
+//builder.Services.AddElasticApm();
+
 // ✅ Build
 var app = builder.Build();
 
 // 🧱 DB Migrate
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    dbContext.Database.Migrate();
+//}
 
 // 🧪 DevTools
 if (app.Environment.IsDevelopment())
@@ -80,6 +84,7 @@ if (app.Environment.IsDevelopment())
 //app.MapGet("/", () => "Scalar çalışıyor!")
 //   .WithName("Root")
 //   .WithOpenApi(); // ❗ bu satır olmadan Scalar interface boş olur
+
 
 // ⚙️ Middleware
 app.UseHttpsRedirection();

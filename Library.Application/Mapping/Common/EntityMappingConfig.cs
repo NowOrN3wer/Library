@@ -15,8 +15,7 @@ internal sealed class EntityMappingConfig : IRegister
             .Map(dest => dest.CreatedBy, src => src.CreatedBy)
             .Map(dest => dest.UpdatedBy, src => src.UpdatedBy)
             .Map(dest => dest.CreatedAt, src => src.CreatedAt)
-            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
-            .Map(dest => dest.IsDeleted, src => src.IsDeleted);
+            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt);
 
         // EntityDto → Entity
         config.NewConfig<EntityDto, Entity>()
@@ -25,8 +24,7 @@ internal sealed class EntityMappingConfig : IRegister
             .Map(dest => dest.CreatedBy, src => src.CreatedBy)
             .Map(dest => dest.UpdatedBy, src => src.UpdatedBy)
             .Map(dest => dest.CreatedAt, src => src.CreatedAt)
-            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
-            .Map(dest => dest.IsDeleted, src => src.IsDeleted);
+            .Map(dest => dest.UpdatedAt, src => src.UpdatedAt);
     }
 }
 

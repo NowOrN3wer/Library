@@ -27,8 +27,7 @@ internal sealed class WriterMappingConfig : IRegister
                 CreatedAt = src.CreatedAt,
                 UpdatedAt = src.UpdatedAt,
                 CreatedBy = src.CreatedBy,
-                UpdatedBy = src.UpdatedBy,
-                IsDeleted = src.IsDeleted
+                UpdatedBy = src.UpdatedBy
             });
 
         // EntityDto → Entity
