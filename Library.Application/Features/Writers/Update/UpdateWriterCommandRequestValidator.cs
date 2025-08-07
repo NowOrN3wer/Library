@@ -1,12 +1,15 @@
-﻿using FluentValidation;
+using FluentValidation;
 
-namespace Library.Application.Features.Writers.Add;
-public sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCommand>
+namespace Library.Application.Features.Writers.Update;
+
+public class UpdateWriterCommandRequestValidator : AbstractValidator<UpdateWriterCommand>
 {
-    public AddWriterCommandValidator()
+    public UpdateWriterCommandRequestValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Id alanı boş olamaz.");
+        
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("İsim alanı boş olamaz.")
             .MaximumLength(100)
             .WithMessage("İsim en fazla 100 karakter olabilir.");
 

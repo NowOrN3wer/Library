@@ -10,5 +10,4 @@ public abstract record EntityDto
     public string? UpdatedBy { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset? UpdatedAt { get; init; }
-    public EntityStatus IsDeleted { get; init; }
 }
