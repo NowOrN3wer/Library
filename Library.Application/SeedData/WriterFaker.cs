@@ -1,6 +1,6 @@
 ﻿using Bogus;
-using Library.Application.Features.Writers.Add;
 using System.ComponentModel.DataAnnotations;
+using Library.Application.Features.Writers.Commands.Add;
 
 namespace Library.Application.SeedData;
 
