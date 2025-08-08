@@ -4,15 +4,16 @@ using Mapster;
 using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Writers.GetPage;
+namespace Library.Application.Features.Writers.Queries.GetPage;
 
-internal sealed class GetPageWriterCommandHandler(
-    IWriterRepository repository) : IRequestHandler<GetPageWriterCommand, Result<BasePageResponseDto<WriterDto>>>
+internal sealed class GetPageWriterQueryHandler(
+    IWriterRepository repository) : IRequestHandler<GetPageWriterQuery, Result<BasePageResponseDto<WriterDto>>>
 {
-    public async Task<Result<BasePageResponseDto<WriterDto>>> Handle(GetPageWriterCommand request, CancellationToken cancellationToken)
+    public async Task<Result<BasePageResponseDto<WriterDto>>> Handle(GetPageWriterQuery request,
+        CancellationToken cancellationToken)
     {
-        var filterExpression = GetPageWriterExpressionBuilder.BuildFilter(request);
-        var orderByExpression = GetPageWriterExpressionBuilder.BuildOrderBy(request.OrderByField);
+        var filterExpression = GetPageWriterQueryExpressionBuilder.BuildFilter(request);
+        var orderByExpression = GetPageWriterQueryExpressionBuilder.BuildOrderBy(request.OrderByField);
 
         var (items, totalCount) = await repository.GetPagedAsync(
             pageNumber: request.PageNumber,
@@ -22,7 +23,7 @@ internal sealed class GetPageWriterCommandHandler(
             isDescending: !request.OrderByAsc,
             getAllData: request.GetAllData
         );
-        
+
         var resultItems = items.Adapt<List<WriterDto>>();
 
         var result = new BasePageResponseDto<WriterDto>

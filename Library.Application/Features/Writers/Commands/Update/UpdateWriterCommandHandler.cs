@@ -3,7 +3,7 @@ using Library.Domain.Repositories;
 using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Writers.Update;
+namespace Library.Application.Features.Writers.Commands.Update;
 
 internal sealed class UpdateWriterCommandHandler(
     IWriterRepository repository,
@@ -13,12 +13,12 @@ internal sealed class UpdateWriterCommandHandler(
     {
         var validator = new UpdateWriterCommandDomainValidator(repository);
         var validationResult = await validator.ValidateAsync(request);
-        
+
         if (!validationResult.IsSuccessful || validationResult.Data is not { } write)
         {
             return Result<bool>.Failure(validationResult.ErrorMessages ?? []);
         }
-        
+
         var writer = validationResult.Data;
 
         if (!string.IsNullOrWhiteSpace(request.FirstName) && request.FirstName != writer.FirstName)
@@ -44,7 +44,7 @@ internal sealed class UpdateWriterCommandHandler(
 
         if (!string.IsNullOrWhiteSpace(request.Email) && request.Email != writer.Email)
             writer.Email = request.Email;
-        
+
         repository.Update(writer);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync(cancellationToken);
     }

@@ -1,14 +1,14 @@
 using FluentValidation;
 
-namespace Library.Application.Features.Writers.Update;
+namespace Library.Application.Features.Writers.Commands.Update;
 
-public class UpdateWriterCommandRequestValidator : AbstractValidator<UpdateWriterCommand>
+internal sealed class UpdateWriterCommandRequestValidator : AbstractValidator<UpdateWriterCommand>
 {
     public UpdateWriterCommandRequestValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty().WithMessage("Id alanı boş olamaz.");
-        
+
         RuleFor(x => x.FirstName)
             .MaximumLength(100)
             .WithMessage("İsim en fazla 100 karakter olabilir.");
@@ -34,6 +34,5 @@ public class UpdateWriterCommandRequestValidator : AbstractValidator<UpdateWrite
             .MaximumLength(255).WithMessage("Email en fazla 255 karakter olabilir.")
             .EmailAddress().When(x => !string.IsNullOrWhiteSpace(x.Email))
             .WithMessage("Geçerli bir email adresi giriniz.");
-
     }
 }

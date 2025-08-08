@@ -25,4 +25,8 @@
         <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Writers\Queries\" />
+    </ItemGroup>
+
 </Project>

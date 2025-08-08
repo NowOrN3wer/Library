@@ -3,9 +3,9 @@ using Library.Application.Dto.WriterDtos;
 using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Writers.GetPage;
+namespace Library.Application.Features.Writers.Queries.GetPage;
 
-public sealed record GetPageWriterCommand : BasePageRequestDto, IRequest<Result<BasePageResponseDto<WriterDto>>>
+public sealed record GetPageWriterQuery : BasePageRequestDto, IRequest<Result<BasePageResponseDto<WriterDto>>>
 {
     public string? FirstName { get; init; }
     public string? LastName { get; init; }

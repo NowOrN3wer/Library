@@ -1,27 +1,28 @@
-using Library.Application.Common.Interfaces;
+﻿using Library.Application.Common.Interfaces;
+using Library.Application.Features.Writers.Commands.Update;
 using Library.Domain.Enums;
 using Library.Domain.Repositories;
 using MediatR;
 using TS.Result;
 
-namespace Library.Application.Features.Writers.Delete;
+namespace Library.Application.Features.Writers.Commands.Restore;
 
-internal sealed class DeleteWriterCommandHandler(
+internal sealed class RestoreWriterCommandHandler(
     IWriterRepository repository,
-    IUnitOfWorkWithTransaction unitOfWork) : IRequestHandler<DeleteWriterCommand, Result<bool>>
+    IUnitOfWorkWithTransaction unitOfWork) : IRequestHandler<RestoreWriterCommand, Result<bool>>
 {
-    public async Task<Result<bool>> Handle(DeleteWriterCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Handle(RestoreWriterCommand request, CancellationToken cancellationToken)
     {
-        var validator = new DeleteWriterCommandDomainValidator(repository);
+        var validator = new RestoreWriterCommandDomainValidator(repository);
         var validationResult = await validator.ValidateAsync(request);
-        
+
         if (!validationResult.IsSuccessful || validationResult.Data is not { } write)
         {
             return Result<bool>.Failure(validationResult.ErrorMessages ?? []);
         }
-        
+
         var writer = validationResult.Data;
-        writer.IsDeleted = EntityStatus.DELETED;
+        writer.IsDeleted = EntityStatus.ACTIVE;
         repository.Update(writer);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync(cancellationToken);
     }

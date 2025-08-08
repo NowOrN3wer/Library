@@ -1,8 +1,8 @@
 using FluentValidation;
 
-namespace Library.Application.Features.Writers.Delete;
+namespace Library.Application.Features.Writers.Commands.Delete;
 
-public class DeleteWriterCommandRequestValidator: AbstractValidator<DeleteWriterCommand>
+internal sealed class DeleteWriterCommandRequestValidator : AbstractValidator<DeleteWriterCommand>
 {
     public DeleteWriterCommandRequestValidator()
     {

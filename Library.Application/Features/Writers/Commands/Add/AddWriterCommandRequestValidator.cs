@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 
-namespace Library.Application.Features.Writers.Add;
-public sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCommand>
+namespace Library.Application.Features.Writers.Commands.Add;
+
+internal sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCommand>
 {
     public AddWriterCommandValidator()
     {
@@ -31,6 +32,5 @@ public sealed class AddWriterCommandValidator : AbstractValidator<AddWriterComma
             .MaximumLength(255).WithMessage("Email en fazla 255 karakter olabilir.")
             .EmailAddress().When(x => !string.IsNullOrWhiteSpace(x.Email))
             .WithMessage("Geçerli bir email adresi giriniz.");
-
     }
 }
