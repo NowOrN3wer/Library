@@ -7,7 +7,8 @@ internal sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCom
     public AddWriterCommandValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("İsim alanı boş olamaz.")
+            .Must(name => !string.IsNullOrWhiteSpace(name))
+            .WithMessage("İsim alanı boş olamaz.")
             .MaximumLength(100)
             .WithMessage("İsim en fazla 100 karakter olabilir.");
 

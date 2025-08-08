@@ -14,7 +14,7 @@ internal sealed class AddWriterCommandHandler(
 {
     public async Task<Result<bool>> Handle(AddWriterCommand request, CancellationToken cancellationToken)
     {
-        /*  int total = 1_000_00;
+         /*int total = 1_000_0;
           int batchSize = 1000;
           var faker = WriterFaker.GetFaker(); // Faker<WriterDto>
 

@@ -6,8 +6,11 @@ internal sealed class UpdateWriterCommandRequestValidator : AbstractValidator<Up
 {
     public UpdateWriterCommandRequestValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id alanı boş olamaz.");
+        RuleFor(x => x.FirstName)
+            .Must(name => !string.IsNullOrWhiteSpace(name))
+            .WithMessage("İsim alanı boş olamaz.")
+            .MaximumLength(100)
+            .WithMessage("İsim en fazla 100 karakter olabilir.");
 
         RuleFor(x => x.FirstName)
             .MaximumLength(100)
