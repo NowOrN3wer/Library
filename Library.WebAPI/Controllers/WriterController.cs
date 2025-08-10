@@ -3,6 +3,7 @@ using Library.Application.Features.Writers.Commands.Delete;
 using Library.Application.Features.Writers.Commands.Restore;
 using Library.Application.Features.Writers.Commands.Update;
 using Library.Application.Features.Writers.Queries.GetById;
+using Library.Application.Features.Writers.Queries.GetLookup;
 using Library.Application.Features.Writers.Queries.GetPage;
 using Library.WebAPI.Abstractions;
 using MediatR;
@@ -54,6 +55,13 @@ public class WriterController(IMediator mediator) : ApiController(mediator)
     public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new RestoreWriterCommand(id), cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet("params")]
+    public async Task<IActionResult> Lookup([FromQuery] GetWriterLookupQuery request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 }

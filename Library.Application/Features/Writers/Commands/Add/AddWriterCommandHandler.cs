@@ -14,27 +14,27 @@ internal sealed class AddWriterCommandHandler(
 {
     public async Task<Result<bool>> Handle(AddWriterCommand request, CancellationToken cancellationToken)
     {
-         /*int total = 1_000_0;
-          int batchSize = 1000;
-          var faker = WriterFaker.GetFaker(); // Faker<WriterDto>
+        //int total = 1_000_0;
+        //int batchSize = 1000;
+        //var faker = WriterFaker.GetFaker(); // Faker<WriterDto>
 
-          for (var i = 0; i < total / batchSize; i++)
-          {
-              var batch = Enumerable.Range(0, batchSize)
-                  .Select(_ =>
-                  {
-                      var dto = faker.Generate(); // WriterDto
-                      return dto.Adapt<Writer>();
-                  })
-                  .Select(cmd => cmd.Adapt<Writer>()) // Mapster ile
-                  .ToList();
+        //for (var i = 0; i < total / batchSize; i++)
+        //{
+        //    var batch = Enumerable.Range(0, batchSize)
+        //        .Select(_ =>
+        //        {
+        //            var dto = faker.Generate(); // WriterDto
+        //            return dto.Adapt<Writer>();
+        //        })
+        //        .Select(cmd => cmd.Adapt<Writer>()) // Mapster ile
+        //        .ToList();
 
-              await repository.AddRangeAsync(batch);
-              await unitOfWork.SaveChangesAsync();
+        //    await repository.AddRangeAsync(batch);
+        //    await unitOfWork.SaveChangesAsync();
 
-              Console.WriteLine($"Inserted {batchSize} writers");
-          }*/
-
+        //    Console.WriteLine($"Inserted {batchSize} writers");
+        //}
+        //return true;
         var writer = request.Adapt<Writer>();
         await repository.AddAsync(writer, cancellationToken);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync(cancellationToken);
