@@ -121,4 +121,4 @@ app.MapHealthChecksUI(options =>
 ExtensionsMiddleware.CreateFirstUser(app);
 
 // 🚀 Başlat
-app.Run();
+await app.RunAsync();

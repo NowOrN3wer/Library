@@ -11,7 +11,7 @@ namespace Library.Application.Features.Writers.Queries.GetLookup;
 internal class GetWriterLookupQueryHandler(ILookupService lookup) : IRequestHandler<GetWriterLookupQuery, Result<IReadOnlyList<LookupItemDto<Guid>>>>
 {
     public async Task<Result<IReadOnlyList<LookupItemDto<Guid>>>> Handle(
-        GetWriterLookupQuery request, CancellationToken ct)
+        GetWriterLookupQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<Writer, Guid>> idSel = w => w.Id;
         Expression<Func<Writer, string>> textSel =
@@ -25,7 +25,7 @@ internal class GetWriterLookupQueryHandler(ILookupService lookup) : IRequestHand
             idSelector: idSel,
             textSelector: textSel,
             baseFilter: baseFilter,
-            ct: ct);
+            ct: cancellationToken);
 
         return Result<IReadOnlyList<LookupItemDto<Guid>>>.Succeed(
             items ?? []

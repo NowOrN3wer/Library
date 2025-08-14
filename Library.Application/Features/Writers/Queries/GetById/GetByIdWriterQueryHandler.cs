@@ -14,7 +14,7 @@ internal sealed class GetByIdWriterQueryHandler(IWriterRepository repository)
         var validator = new GetByIdWriterQueryDomainValidator(repository);
         var validationResult = await validator.ValidateAsync(request);
         
-        if (!validationResult.IsSuccessful || validationResult.Data is not { } write)
+        if (!validationResult.IsSuccessful || validationResult.Data is null)
         {
             return Result<WriterDto>.Failure(validationResult.ErrorMessages ?? []);
         }

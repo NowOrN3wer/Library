@@ -1,3 +1,4 @@
+namespace Library.Application.Dto.Abstractions;
 public record class BasePageResponseDto<T>
 {
     public List<T>? List { get; init; } = [];

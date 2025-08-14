@@ -14,7 +14,7 @@ internal sealed class UpdateWriterCommandHandler(
         var validator = new UpdateWriterCommandDomainValidator(repository);
         var validationResult = await validator.ValidateAsync(request);
 
-        if (!validationResult.IsSuccessful || validationResult.Data is not { } write)
+        if (!validationResult.IsSuccessful || validationResult.Data is null)
         {
             return Result<bool>.Failure(validationResult.ErrorMessages ?? []);
         }

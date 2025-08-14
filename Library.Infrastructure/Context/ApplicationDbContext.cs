@@ -112,9 +112,7 @@ public sealed class ApplicationDbContext
             }
         }
     }
-
-    private static DateTimeOffset GetUtcNow() => DateTimeOffset.UtcNow;
-
+    
     private static DateTimeOffset GetTurkeyTime()
     {
         var timeZoneId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
