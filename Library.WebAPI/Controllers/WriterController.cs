@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.WebAPI.Controllers;
 
 [Authorize]
-public class WriterController(IMediator mediator) : ApiController(mediator)
+public sealed class WriterController(IMediator mediator) : ApiController(mediator)
 {
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddWriterCommand request, CancellationToken cancellationToken)
