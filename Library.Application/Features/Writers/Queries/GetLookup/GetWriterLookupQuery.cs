@@ -4,8 +4,5 @@ using TS.Result;
 
 namespace Library.Application.Features.Writers.Queries.GetLookup;
 
-public sealed record GetWriterLookupQuery(
-    string? Q,
-    int Limit = 20,
-    List<Guid>? IncludeIds = null
-) : IRequest<Result<IReadOnlyList<LookupItemDto<Guid>>>>;
+public sealed record GetWriterLookupQuery()
+    : LookupRequestDto<Guid>, IRequest<Result<IReadOnlyList<LookupItemDto<Guid>>>>;

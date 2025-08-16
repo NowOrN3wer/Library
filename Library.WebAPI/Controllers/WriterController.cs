@@ -58,8 +58,8 @@ public sealed class WriterController(IMediator mediator) : ApiController(mediato
         return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("params")]
-    public async Task<IActionResult> Lookup([FromQuery] GetWriterLookupQuery request, CancellationToken cancellationToken)
+    [HttpPost]
+    public async Task<IActionResult> Lookup([FromBody] GetWriterLookupQuery request, CancellationToken cancellationToken)
     {
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);

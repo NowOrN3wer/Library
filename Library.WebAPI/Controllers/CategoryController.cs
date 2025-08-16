@@ -1,5 +1,6 @@
 using Library.Application.Features.Categories.Commands.Add;
 using Library.Application.Features.Categories.Commands.Update;
+using Library.Application.Features.Categories.Queries.GetLookupQuery;
 using Library.Application.Features.Categories.Queries.GetPage;
 using Library.WebAPI.Abstractions;
 using MediatR;
@@ -28,6 +29,13 @@ public sealed class CategoryController(IMediator mediator) : ApiController(media
     
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var response = await Mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Lookup([FromBody] GetCategoryLookupQuery request, CancellationToken cancellationToken)
     {
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
