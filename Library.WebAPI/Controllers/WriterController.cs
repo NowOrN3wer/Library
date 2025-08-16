@@ -18,7 +18,7 @@ public sealed class WriterController(IMediator mediator) : ApiController(mediato
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddWriterCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 
@@ -26,42 +26,42 @@ public sealed class WriterController(IMediator mediator) : ApiController(mediato
     public async Task<IActionResult> GetPage([FromBody] GetPageWriterQuery request,
         CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateWriterCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new DeleteWriterCommand(id), cancellationToken);
+        var response = await Mediator.Send(new DeleteWriterCommand(id), cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetByIdWriterQuery(id), cancellationToken);
+        var response = await Mediator.Send(new GetByIdWriterQuery(id), cancellationToken);
         return StatusCode(response.StatusCode, response);
     }    
     
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RestoreWriterCommand(id), cancellationToken);
+        var response = await Mediator.Send(new RestoreWriterCommand(id), cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 
     [HttpGet("params")]
     public async Task<IActionResult> Lookup([FromQuery] GetWriterLookupQuery request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 }
