@@ -7,7 +7,7 @@ using TS.Result;
 
 namespace Library.Application.Features.Categories.Commands.Add;
 
-public sealed record AddCategoryCommandHandler(
+internal sealed class AddCategoryCommandHandler(
     ICategoryRepository repository,
     IUnitOfWorkWithTransaction unitOfWork) : IRequestHandler<AddCategoryCommand, Result<bool>>
 {

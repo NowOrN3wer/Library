@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Application.Features.Writers.Queries.GetPage;
 
-public static class GetPageWriterQueryExpressionBuilder
+internal static class GetPageWriterQueryExpressionBuilder
 {
-    public static Expression<Func<Writer, bool>> BuildFilter(GetPageWriterQuery request)
+    internal static Expression<Func<Writer, bool>> BuildFilter(GetPageWriterQuery request)
     {
         Expression<Func<Writer, bool>> predicate = w => true;
 
@@ -42,7 +42,7 @@ public static class GetPageWriterQueryExpressionBuilder
     {
         return fieldName?.ToLowerInvariant() switch
         {
-            "Firstname" => x => x.FirstName,
+            "firstname" => x => x.FirstName,
             "lastname" => x => x.LastName ?? string.Empty,
             "nationality" => x => x.Nationality ?? string.Empty,
             "birthdate" => x => x.BirthDate ?? DateTimeOffset.MinValue,

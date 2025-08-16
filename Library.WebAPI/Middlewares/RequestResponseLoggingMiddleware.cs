@@ -28,7 +28,7 @@ public class RequestResponseLoggingMiddleware(RequestDelegate next)
         await next(context); // request pipeline’a devam et
 
         context.Response.Body.Seek(0, SeekOrigin.Begin);
-        var responseText = await new StreamReader(context.Response.Body).ReadToEndAsync();
+        //var responseText = await new StreamReader(context.Response.Body).ReadToEndAsync();
         context.Response.Body.Seek(0, SeekOrigin.Begin);
 
         //var log = new ApiLog

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Library.Application.Features.Writers.Commands.Add;
 
-namespace Library.Application.SeedData;
+namespace Library.Application.SeedData.WriterSeed;
 
 public static class WriterFaker
 {

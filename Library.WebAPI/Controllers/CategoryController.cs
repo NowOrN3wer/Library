@@ -1,4 +1,5 @@
 using Library.Application.Features.Categories.Commands.Add;
+using Library.Application.Features.Categories.Queries.GetPage;
 using Library.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,14 @@ public sealed class CategoryController(IMediator mediator) : ApiController(media
 {
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> GetPage([FromBody] GetPageCategoryQuery request,
+        CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);

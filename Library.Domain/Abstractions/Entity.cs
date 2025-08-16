@@ -25,6 +25,4 @@ public abstract class Entity
     public DateTimeOffset? UpdatedAt { get; set; }
 
     public EntityStatus IsDeleted { get; set; } = EntityStatus.ACTIVE;
-    
-    //public NpgsqlTsVector SearchVector { get; set; } = default!;
 }
