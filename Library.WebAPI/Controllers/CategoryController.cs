@@ -1,6 +1,6 @@
 using Library.Application.Features.Categories.Commands.Add;
 using Library.Application.Features.Categories.Commands.Update;
-using Library.Application.Features.Categories.Queries.GetLookupQuery;
+using Library.Application.Features.Categories.Queries.GetLookup;
 using Library.Application.Features.Categories.Queries.GetPage;
 using Library.WebAPI.Abstractions;
 using MediatR;

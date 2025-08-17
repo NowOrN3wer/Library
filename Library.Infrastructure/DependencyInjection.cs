@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using GenericRepository;
+using Library.Application.Common.Interfaces;
 using Library.Domain.Entities;
 using Library.Infrastructure.Context;
 using Library.Infrastructure.Options;
+using Library.Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +26,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
-
+        services.AddScoped<ILookupService, EfLookupService>();
         services
             .AddIdentity<AppUser, IdentityRole<Guid>>(cfr =>
             {
