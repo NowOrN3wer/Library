@@ -1,6 +1,12 @@
-# Clean Architecture
+# 📚 Clean Architecture - Teknoloji Demo Projesi
 
-## Libraries Used in the Project
+Bu proje, **.NET 9** üzerinde yeni özellikleri ve modern yazılım geliştirme pratiklerini denemek amacıyla hazırlanmış bir **teknoloji demosudur**.  
+Hem halihazırda öğrendiğim teknikleri uygulamak hem de ileride eklemeyi planladığım teknolojiler için bir test ortamı oluşturmak hedeflenmiştir.  
+Ayrıca proje, gelecekte **mikro servis mimarisi** üzerine yapılacak çalışmalar için temel bir yapı sunar.
+
+---
+
+## 🚀 Mevcut Teknolojiler
 - **EntityFrameworkCore**
 - **EntityFrameworkCore.Identity**
 - **MediatR**
@@ -9,9 +15,16 @@
 - **TS.Result**
 - **TS.EntityFrameworkCore.GenericRepository**
 
-docker build -t library_image .
+---
 
-docker run -d -p 9910:9910 --name library_container library_image
+## 🛠️ Planlanan ve Denemek İstediğim Teknolojiler
+- **Apache Kafka**
+- **RabbitMQ**
+- **MongoDB**
+- **Elastic APM**
+- **Full-Text Search**
+- Mikro servis mimarisi uygulamaları
 
-docker run --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=sys1 -p 5432:5432 -d postgres:latest
+---
 
+## 🗂️ Proje Yapısı (Clean Architecture)

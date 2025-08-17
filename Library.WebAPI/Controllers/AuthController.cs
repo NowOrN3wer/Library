@@ -12,7 +12,7 @@ public sealed class AuthController(IMediator mediator) : ApiController(mediator)
     [HttpPost]
     public async Task<IActionResult> Login(LoginCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
 }

@@ -20,20 +20,19 @@ public class ExtendedRepository<T>(ApplicationDbContext context)
         Expression<Func<T, object>>? orderBy = null,
         bool isDescending = false,
         bool getAllData = false,
-        params Expression<Func<T, object>>[] includes)
+        params Expression<Func<T, object>>[]? includes)
     {
         if (pageNumber <= 0) pageNumber = 1;
 
-        var query = _context.Set<T>().AsExpandable();
+        var query = _context.Set<T>()
+            .AsNoTracking()
+            .AsExpandable();
 
         if (filter is not null) query = query.Where(filter);
 
         if (includes is not null && includes.Length > 0)
         {
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
         }
 
         if (orderBy is not null)

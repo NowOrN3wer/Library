@@ -41,18 +41,20 @@ public sealed class ApplicationDbContext
         builder.Ignore<IdentityUserClaim<Guid>>();
 
         // Apply CreatedAt / UpdatedAt to all entities inheriting from Entity base
-        foreach (var entityType in builder.Model.GetEntityTypes())
-        {
-            if (typeof(Entity).IsAssignableFrom(entityType.ClrType))
+        builder.Model.GetEntityTypes()
+            .Where(et => typeof(Entity).IsAssignableFrom(et.ClrType))
+            .ToList()
+            .ForEach(et =>
             {
-                builder.Entity(entityType.ClrType).Property(nameof(Entity.CreatedAt))
-                       .HasColumnType("timestamptz")
-                       .IsRequired();
+                builder.Entity(et.ClrType)
+                    .Property(nameof(Entity.CreatedAt))
+                    .HasColumnType("timestamptz")
+                    .IsRequired();
 
-                builder.Entity(entityType.ClrType).Property(nameof(Entity.UpdatedAt))
-                       .HasColumnType("timestamptz");
-            }
-        }
+                builder.Entity(et.ClrType)
+                    .Property(nameof(Entity.UpdatedAt))
+                    .HasColumnType("timestamptz");
+            });
 
         // Book → Writer (many-to-one)
         builder.Entity<Book>()
@@ -112,9 +114,7 @@ public sealed class ApplicationDbContext
             }
         }
     }
-
-    private static DateTimeOffset GetUtcNow() => DateTimeOffset.UtcNow;
-
+    
     private static DateTimeOffset GetTurkeyTime()
     {
         var timeZoneId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)

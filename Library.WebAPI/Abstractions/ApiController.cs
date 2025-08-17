@@ -7,5 +7,5 @@ namespace Library.WebAPI.Abstractions;
 [ApiController]
 public abstract class ApiController(IMediator mediator) : ControllerBase
 {
-    protected readonly IMediator _mediator = mediator;
+    protected readonly IMediator Mediator = mediator;
 }

@@ -9,14 +9,14 @@ public static class ExtensionsMiddleware
     {
         using var scoped = app.Services.CreateScope();
         var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-
-        if (userManager.Users.Any(p => p.UserName == "admin")) return;
+        var admin = "admin";
+        if (userManager.Users.Any(p => p.UserName == admin)) return;
         AppUser user = new()
         {
-            UserName = "admin",
+            UserName = admin,
             Email = "admin@admin.com",
-            FirstName = "admin",
-            LastName = "admin",
+            FirstName = admin,
+            LastName = admin,
             EmailConfirmed = true
         };
 
