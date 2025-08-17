@@ -15,7 +15,7 @@ internal sealed class GetCategoryLookupQueryHandler(ILookupService lookup)
     {
         Expression<Func<Category, Guid>> idSel = c => c.Id;
         Expression<Func<Category, string>> txtSel =
-            w => (w.Name ?? "") + " " + (w.Description ?? "");
+            w => (w.Name ?? "");
 
         var resp = await lookup.ForAsync<Category, Guid>(
             q:          request.Q,

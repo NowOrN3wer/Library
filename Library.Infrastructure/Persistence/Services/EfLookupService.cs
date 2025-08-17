@@ -1,12 +1,19 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Library.Application.Common.Interfaces;
 using Library.Application.Dto.Shared;
+using Library.Domain.Abstractions;      // Entity
+using Library.Domain.Enums;             // EntityStatus
 using Library.Infrastructure.Context;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL; // EF.Functions.ILike
 
 namespace Library.Infrastructure.Persistence.Services;
 
@@ -18,7 +25,7 @@ public sealed class EfLookupService(ApplicationDbContext db) : ILookupService
     public async Task<LookupResponseDto<TKey>> ForAsync<TEntity, TKey>(
         string? q,
         int limit,
-        IEnumerable<TKey>? includeIds,
+        System.Collections.Generic.IEnumerable<TKey>? includeIds,
         string? cursor,
         Expression<Func<TEntity, TKey>> idSelector,
         Expression<Func<TEntity, string>> textSelector,
@@ -36,6 +43,18 @@ public sealed class EfLookupService(ApplicationDbContext db) : ILookupService
             .AsNoTracking()
             .AsExpandable();
 
+        // ★ Otomatik ACTIVE filtresi (TEntity, Entity'den türemişse)
+        if (typeof(Entity).IsAssignableFrom(typeof(TEntity)))
+        {
+            var p   = Expression.Parameter(typeof(TEntity), "e");
+            var prop= Expression.Property(p, nameof(Entity.IsDeleted));              // e.IsDeleted
+            var val = Expression.Constant(EntityStatus.ACTIVE);                      // ACTIVE
+            var eq  = Expression.Equal(prop, val);                                   // e.IsDeleted == ACTIVE
+            var activeLambda = Expression.Lambda<Func<TEntity, bool>>(eq, p);
+            set = set.Where(activeLambda);
+        }
+
+        // İsteğe bağlı ek filtre
         if (baseFilter is not null)
             set = set.Where(baseFilter);
 
@@ -61,7 +80,6 @@ public sealed class EfLookupService(ApplicationDbContext db) : ILookupService
             ? set.Select(e => new
               {
                   Id    = idSel.Invoke(e),
-                  // null olma ihtimaline karşı güvenli ToString:
                   IdStr = idSel.Invoke(e) == null ? string.Empty : idSel.Invoke(e)!.ToString(),
                   Text  = EF.Functions.Collate(textSel.Invoke(e), "tr-x-icu")
               })
@@ -84,7 +102,7 @@ public sealed class EfLookupService(ApplicationDbContext db) : ILookupService
                 if (typeof(TKey) == typeof(Guid))
                 {
                     CursorDto? dto = JsonSerializer.Deserialize<CursorDto?>(json);
-                    if (dto.HasValue)
+                    if (dto.HasValue && !string.IsNullOrEmpty(dto.Value.Text) && dto.Value.Id != Guid.Empty)
                     {
                         afterText = dto.Value.Text;
                         afterGuid = dto.Value.Id;
@@ -94,7 +112,7 @@ public sealed class EfLookupService(ApplicationDbContext db) : ILookupService
             catch { /* bozuk cursor'u yok say */ }
         }
 
-        // Seek (Text, IdStr) — iki parametreli Compare kullan
+        // Seek (Text, IdStr) — 2 parametreli Compare kullan
         if (afterText is not null && typeof(TKey) == typeof(Guid))
         {
             var afterIdStr = afterGuid!.Value.ToString();
