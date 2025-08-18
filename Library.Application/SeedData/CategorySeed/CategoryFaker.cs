@@ -1,7 +1,7 @@
-namespace Library.Application.SeedData.CategorySeed;
-
 using Bogus;
 using Library.Application.Features.Categories.Commands.Add;
+
+namespace Library.Application.SeedData.CategorySeed;
 
 public static class CategoryFaker
 {
