@@ -1,5 +1,6 @@
 ﻿using Library.Domain.Abstractions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Library.Domain.Entities;
 
@@ -27,6 +28,9 @@ public sealed class Writer : Entity
 
     [MaxLength(255)]
     public string? Email { get; set; }
+    
+    [NotMapped]
+    public string FullName => string.Join(" ", FirstName, LastName);
 
     // Navigation property (optional, if needed)
     public ICollection<Book>? Books { get; set; }

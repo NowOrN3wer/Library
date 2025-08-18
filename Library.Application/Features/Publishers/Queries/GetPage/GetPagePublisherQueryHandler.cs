@@ -16,10 +16,14 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
 {
     public async Task<Result<BasePageResponseDto<PublisherDto>>> Handle(GetPagePublisherQuery request, CancellationToken cancellationToken)
     {
-        var nameFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Name,     x => x.Name);
-        var websiteFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Website, x => x.Website);
-        var addressFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Address, x => x.Address);
-        var countryFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Country, x => x.Country);
+        var nameFilter = QueryExpressionBuilder
+            .BuildContainsFilter<Publisher>(request.Name,     x => x.Name);
+        var websiteFilter = QueryExpressionBuilder
+            .BuildContainsFilter<Publisher>(request.Website, x => x.Website);
+        var addressFilter = QueryExpressionBuilder
+            .BuildContainsFilter<Publisher>(request.Address, x => x.Address);
+        var countryFilter = QueryExpressionBuilder
+            .BuildContainsFilter<Publisher>(request.Country, x => x.Country);
 
         // Tümünü AND'le
         var finalFilter = nameFilter
