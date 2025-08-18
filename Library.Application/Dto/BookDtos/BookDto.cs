@@ -1,5 +1,3 @@
-using Library.Application.Dto.Abstractions;
-
 namespace Library.Application.Dto.BookDtos;
 
 public sealed record BookDto(
