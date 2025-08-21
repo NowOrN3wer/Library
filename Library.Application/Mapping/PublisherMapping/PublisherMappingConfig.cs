@@ -15,7 +15,8 @@ internal sealed class PublisherMappingConfig : IRegister
                 src.Name,
                 src.Website,
                 src.Address,
-                src.Country
+                src.Country,
+                (src.Books == null ? 0 : src.Books.Count) 
             )
             {
                 Id = src.Id,

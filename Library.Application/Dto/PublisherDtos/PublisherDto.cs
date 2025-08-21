@@ -6,5 +6,6 @@ public sealed record PublisherDto(
     string Name,
     string? Website,
     string? Address,
-    string? Country
+    string? Country,
+    long BookCount
 ) : EntityDto;
