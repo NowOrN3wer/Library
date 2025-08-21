@@ -1,4 +1,5 @@
 using Library.Application.Features.Books.Commands.Add;
+using Library.Application.Features.Books.Queries.GetPage;
 using Library.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,14 @@ public sealed class BookController(IMediator mediator) : ApiController(mediator)
 {
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddBookCommand request, CancellationToken cancellationToken)
+    {
+        var response = await Mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> GetPage([FromBody] GetPageBookQuery request,
+        CancellationToken cancellationToken)
     {
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);

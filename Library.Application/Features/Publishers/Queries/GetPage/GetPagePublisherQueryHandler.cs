@@ -52,7 +52,7 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
                 p.Website,
                 p.Address,
                 p.Country,
-                p.Books!.Count
+                p.Books == null ? 0 : p.Books.Count 
             )
             {
                 Id        = p.Id,
