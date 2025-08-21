@@ -13,8 +13,8 @@ internal sealed class AddCategoryCommandHandler(
 {
     public async Task<Result<bool>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = request.Adapt<Category>();
-        await repository.AddAsync(category, cancellationToken);
+        var entity = request.Adapt<Category>();
+        await repository.AddAsync(entity, cancellationToken);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync(cancellationToken);
     }
 }

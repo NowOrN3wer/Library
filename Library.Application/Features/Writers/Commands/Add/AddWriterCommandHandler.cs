@@ -13,8 +13,8 @@ internal sealed class AddWriterCommandHandler(
 {
     public async Task<Result<bool>> Handle(AddWriterCommand request, CancellationToken cancellationToken)
     {
-        var writer = request.Adapt<Writer>();
-        await repository.AddAsync(writer, cancellationToken);
+        var entity = request.Adapt<Writer>();
+        await repository.AddAsync(entity, cancellationToken);
         return await unitOfWork.SaveChangesAndReturnSuccessAsync(cancellationToken);
     }
 }

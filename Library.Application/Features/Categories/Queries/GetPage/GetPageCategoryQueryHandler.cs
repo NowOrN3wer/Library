@@ -11,7 +11,7 @@ using TS.Result;
 
 namespace Library.Application.Features.Categories.Queries.GetPage;
 
-public class GetPageCategoryQueryHandler(ICategoryRepository repository)
+internal sealed class GetPageCategoryQueryHandler(ICategoryRepository repository)
     : IRequestHandler<GetPageCategoryQuery, Result<BasePageResponseDto<CategoryDto>>>
 {
     public async Task<Result<BasePageResponseDto<CategoryDto>>> Handle(GetPageCategoryQuery request, CancellationToken cancellationToken)

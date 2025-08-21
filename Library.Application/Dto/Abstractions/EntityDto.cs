@@ -1,6 +1,4 @@
-﻿using Library.Domain.Enums;
-
-namespace Library.Application.Dto.Abstractions;
+﻿namespace Library.Application.Dto.Abstractions;
 
 public abstract record EntityDto
 {

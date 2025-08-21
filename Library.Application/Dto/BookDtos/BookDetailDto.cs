@@ -1,12 +1,13 @@
+using Library.Application.Dto.CategoryDtos;
+using Library.Application.Dto.PublisherDtos;
+using Library.Application.Dto.WriterDtos;
+
 namespace Library.Application.Dto.BookDtos;
 
-public sealed record BookDto(
-    Guid WriterId,
-    string WriterName,
-    Guid CategoryId,
-    string CategoryName,
-    Guid PublisherId,
-    string PublisherName,
+public sealed record BookDetailDto(
+    WriterDto Writer,
+    CategoryDto Category,
+    PublisherDto Publisher,
     string Title,
     string? Summary,
     string? ISBN,

@@ -1,4 +1,3 @@
-using GenericRepository;
 using Library.Application.Common.Interfaces;
 using Library.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -6,64 +5,74 @@ using TS.Result;
 
 namespace Library.Infrastructure.Persistence.Services;
 
-public class UnitOfWorkWithTransaction(IUnitOfWork innerUnitOfWork, ApplicationDbContext context)
+public class UnitOfWorkWithTransaction(ApplicationDbContext context)
     : IUnitOfWorkWithTransaction
 {
     private IDbContextTransaction? _transaction;
 
-    public async Task BeginTransactionAsync()
+    public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-        _transaction = await context.Database.BeginTransactionAsync();
+        if (_transaction != null) return;
+        _transaction = await context.Database.BeginTransactionAsync(cancellationToken);
     }
 
-    public async Task CommitTransactionAsync()
+    public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_transaction != null)
-            await _transaction.CommitAsync();
-    }
-
-    public async Task RollbackTransactionAsync()
-    {
-        if (_transaction != null)
-            await _transaction.RollbackAsync();
-    }
-
-    public async Task<T> ExecuteInTransactionAsync<T>(Func<Task<T>> action)
-    {
-        await BeginTransactionAsync();
+        if (_transaction == null) return;
         try
         {
-            var result = await action();
-            await CommitTransactionAsync();
+            await _transaction.CommitAsync(cancellationToken);
+        }
+        finally
+        {
+            await _transaction.DisposeAsync();
+            _transaction = null;
+        }
+    }
+
+    public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        if (_transaction == null) return;
+        try
+        {
+            await _transaction.RollbackAsync(cancellationToken);
+        }
+        finally
+        {
+            await _transaction.DisposeAsync();
+            _transaction = null;
+        }
+    }
+
+    public async Task<T> ExecuteInTransactionAsync<T>(
+        Func<CancellationToken, Task<T>> action,
+        CancellationToken cancellationToken = default)
+    {
+        await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            var result = await action(cancellationToken);
+            await CommitTransactionAsync(cancellationToken);
             return result;
         }
         catch
         {
-            await RollbackTransactionAsync();
+            await RollbackTransactionAsync(cancellationToken);
             throw;
         }
     }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        return innerUnitOfWork.SaveChangesAsync(cancellationToken);
-    }
+        => context.SaveChangesAsync(cancellationToken);
 
     public int SaveChanges()
-    {
-        return innerUnitOfWork.SaveChanges();
-    }
+        => context.SaveChanges();
 
     public async Task<bool> SaveChangesAndReturnSuccessAsync(CancellationToken cancellationToken = default)
-    {
-        return await SaveChangesAsync(cancellationToken) > 0;
-    }
+        => await SaveChangesAsync(cancellationToken) > 0;
 
     public async Task<Result<bool>> SaveChangesAsResultAsync(CancellationToken cancellationToken = default)
-    {
-        var success = await SaveChangesAsync(cancellationToken) > 0;
-        return success
+        => (await SaveChangesAsync(cancellationToken) > 0)
             ? Result<bool>.Succeed(true)
             : Result<bool>.Failure("Değişiklik kaydedilemedi.");
-    }
 }
