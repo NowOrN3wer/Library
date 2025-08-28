@@ -13,16 +13,16 @@
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
         <PackageReference Include="DefaultCorsPolicy" Version="8.0.0" />
-        <PackageReference Include="Elastic.Apm.Extensions.Hosting" Version="1.32.2" />
-        <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.32.2" />
-        <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.3.2" />
+        <PackageReference Include="Elastic.Apm.Extensions.Hosting" Version="1.33.0" />
+        <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.33.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.6.9" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.7.2" />
     </ItemGroup>
 
     <ItemGroup>
