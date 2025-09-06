@@ -7,7 +7,7 @@ using TS.Result;
 
 namespace Library.Application.Features.Writers.Commands.Add;
 
-internal sealed class AddWriterCommandHandler(
+public sealed class AddWriterCommandHandler(
     IWriterRepository repository,
     IUnitOfWorkWithTransaction unitOfWork) : IRequestHandler<AddWriterCommand, Result<bool>>
 {

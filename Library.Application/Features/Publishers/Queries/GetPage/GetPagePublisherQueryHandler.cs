@@ -6,12 +6,15 @@ using Library.Domain.Entities;
 using Library.Domain.Repositories;
 using LinqKit;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using TS.Result;
 
 namespace Library.Application.Features.Publishers.Queries.GetPage;
 
-internal sealed class GetPagePublisherQueryHandler(IPublisherRepository repository)
-    : IRequestHandler<GetPagePublisherQuery, Result<BasePageResponseDto<PublisherDto>>>
+internal sealed class GetPagePublisherQueryHandler(
+    IPublisherRepository publisherRepository,
+    IBookRepository bookRepository // <-- kitap sayıları için eklendi
+) : IRequestHandler<GetPagePublisherQuery, Result<BasePageResponseDto<PublisherDto>>>
 {
     public async Task<Result<BasePageResponseDto<PublisherDto>>> Handle(GetPagePublisherQuery request, CancellationToken cancellationToken)
     {
@@ -20,11 +23,7 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
         var websiteFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Website, x => x.Website);
         var addressFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Address, x => x.Address);
         var countryFilter = QueryExpressionBuilder.BuildContainsFilter<Publisher>(request.Country, x => x.Country);
-
-        var finalFilter = nameFilter
-            .And(websiteFilter)
-            .And(addressFilter)
-            .And(countryFilter);
+        var finalFilter = nameFilter.And(websiteFilter).And(addressFilter).And(countryFilter);
 
         // 2) Sıralama map'i
         var orderMap = new Dictionary<string, Expression<Func<Publisher, object>>>(StringComparer.OrdinalIgnoreCase)
@@ -35,24 +34,39 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
             ["country"] = x => x.Country ?? string.Empty,
             ["id"]      = x => x.Id
         };
+        var orderByExpr = QueryExpressionBuilder.BuildOrderBy(request.OrderByField, orderMap, defaultKey: "id");
 
-        var orderByExpr = QueryExpressionBuilder.BuildOrderBy(
-            request.OrderByField, orderMap, defaultKey: "id");
-
-        // 3) Projection'lı paging çağrısı
-        var (items, totalCount) = await repository.GetPagedAsync(
-            pageNumber:  request.PageNumber,
-            pageSize:    request.PageSize,
-            filter:      finalFilter,
-            orderBy:     orderByExpr,
+        // 3) SAYIMSIZ projection (hafif)
+        var (pageItemsLight, totalCount) = await publisherRepository.GetPagedAsync(
+            pageNumber:   request.PageNumber,
+            pageSize:     request.PageSize,
+            filter:       finalFilter,
+            orderBy:      orderByExpr,
             isDescending: !request.OrderByAsc,
-            getAllData:  request.GetAllData,
-            selector:    p => new PublisherDto(
-                p.Name,
-                p.Website,
-                p.Address,
-                p.Country,
-                p.Books!.Count
+            getAllData:   request.GetAllData,
+            selector:    p => new {
+                p.Id, p.Name, p.Website, p.Address, p.Country,
+                p.Version, p.CreatedAt, p.UpdatedAt, p.CreatedBy, p.UpdatedBy
+            },
+            cancellationToken: cancellationToken
+        );
+
+        var pageList = pageItemsLight.ToList();
+        var ids = pageList.Select(x => x.Id).ToList();
+
+        // 4) TEK sorguda sayılar (sadece bu sayfadaki yayınevleri için)
+        var countDict = ids.Count == 0
+            ? new Dictionary<Guid,int>()
+            : await bookRepository.GetAll() // IQueryable<Book>
+                .Where(b => ids.Contains(b.PublisherId))
+                .GroupBy(b => b.PublisherId)
+                .Select(g => new { PublisherId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.PublisherId, x => x.Count, cancellationToken);
+
+        // 5) DTO oluştur
+        var dtoList = pageList.Select(p => new PublisherDto(
+                p.Name, p.Website, p.Address, p.Country,
+                countDict.TryGetValue(p.Id, out var c) ? c : 0
             )
             {
                 Id        = p.Id,
@@ -61,14 +75,11 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
                 UpdatedAt = p.UpdatedAt,
                 CreatedBy = p.CreatedBy,
                 UpdatedBy = p.UpdatedBy
-            },
-            cancellationToken: cancellationToken
-        );
+            })
+            .ToList();
 
-        // 4) Artık Adapt yok; items zaten DTO
-        var result = new BasePageResponseDto<PublisherDto>
-        {
-            List         = items.ToList(),
+        return new BasePageResponseDto<PublisherDto> {
+            List         = dtoList,
             TotalCount   = totalCount,
             PageNumber   = request.PageNumber,
             PageSize     = request.PageSize,
@@ -76,7 +87,5 @@ internal sealed class GetPagePublisherQueryHandler(IPublisherRepository reposito
             OrderByAsc   = request.OrderByAsc,
             GetAllData   = request.GetAllData
         };
-
-        return result;
     }
 }

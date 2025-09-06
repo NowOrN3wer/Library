@@ -43,7 +43,7 @@ public static class BookSeeder
 
         // Book faker
         var bookFaker = new Faker<Book>("tr")
-            .RuleFor(b => b.Id, _ => Guid.NewGuid())
+            .RuleFor(b => b.Id, _ => Guid.CreateVersion7())
             .RuleFor(b => b.Title, f =>
             {
                 var title = f.Lorem.Sentence(f.Random.Int(2, 6)).TrimEnd('.');

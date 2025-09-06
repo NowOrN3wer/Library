@@ -62,6 +62,9 @@ public sealed class ApplicationDbContext
             .WithMany(w => w.Books)
             .HasForeignKey(b => b.WriterId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.Entity<Book>()
+            .HasIndex(b => b.PublisherId);
 
         // Book → Category (many-to-one)
         builder.Entity<Book>()
@@ -95,7 +98,7 @@ public sealed class ApplicationDbContext
         var userName =
             _httpContextAccessor.HttpContext?.User?.Identity?.Name
             ?? _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value
-            ?? "System";
+            ?? "SYSTEM";
 
         var entries = ChangeTracker.Entries<Entity>();
 
