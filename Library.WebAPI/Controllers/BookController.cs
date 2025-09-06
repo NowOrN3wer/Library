@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.WebAPI.Controllers;
 
-[Authorize]
+[AllowAnonymous]
 public sealed class BookController(IMediator mediator) : ApiController(mediator)
 {
     [HttpPost]

@@ -19,4 +19,9 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
+      <ProjectReference Include="..\Library.WebAPI\Library.WebAPI.csproj" />
+    </ItemGroup>
+
 </Project>

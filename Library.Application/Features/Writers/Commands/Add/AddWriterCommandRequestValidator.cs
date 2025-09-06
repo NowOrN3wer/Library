@@ -2,7 +2,7 @@
 
 namespace Library.Application.Features.Writers.Commands.Add;
 
-internal sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCommand>
+public sealed class AddWriterCommandValidator : AbstractValidator<AddWriterCommand>
 {
     public AddWriterCommandValidator()
     {
