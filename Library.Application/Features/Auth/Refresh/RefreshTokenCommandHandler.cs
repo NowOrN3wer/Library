@@ -21,19 +21,20 @@ internal sealed class RefreshTokenCommandHandler(
 
         if (user is null)
             return (401, "Geçersiz refresh token");
-        
+
         if (user.RefreshTokenExpires is null || user.RefreshTokenExpires <= DateTimeOffset.UtcNow)
             return (401, "Refresh token süresi dolmuş");
-        
+
         var newTokensResult = await jwtProvider.CreateToken(user);
-        
+
         user.RefreshToken = newTokensResult.RefreshToken;
-        user.RefreshTokenExpires = newTokensResult.RefreshTokenExpires.ToUniversalTime(); ;
+        user.RefreshTokenExpires = newTokensResult.RefreshTokenExpires.ToUniversalTime();
+        ;
 
         var update = await userManager.UpdateAsync(user);
         if (!update.Succeeded)
             return (500, "Kullanıcı güncellenemedi");
-        
+
         return Result<LoginCommandResponse>.Succeed(newTokensResult);
     }
 }

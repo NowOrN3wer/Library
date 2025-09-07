@@ -79,7 +79,7 @@ public class UnitOfWorkWithTransaction(ApplicationDbContext context)
 
     public async Task<Result<bool>> SaveChangesAsResultAsync(CancellationToken cancellationToken = default)
     {
-        return (await SaveChangesAsync(cancellationToken) > 0)
+        return await SaveChangesAsync(cancellationToken) > 0
             ? Result<bool>.Succeed(true)
             : Result<bool>.Failure("Değişiklik kaydedilemedi.");
     }

@@ -4,6 +4,7 @@ using Library.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement.Mvc;
 
 namespace Library.WebAPI.Controllers;
 
@@ -26,8 +27,10 @@ public sealed class AuthController(IMediator mediator) : ApiController(mediator)
         return StatusCode(res.StatusCode, res);
     }
 
+    [FeatureGate("RefreshFromCookie")]
+    [FeatureGate("RefreshFromCookie")]
     [AllowAnonymous]
-    [HttpPost("refresh-cookie")]
+    [HttpPost]
     public async Task<IActionResult> RefreshFromCookie(CancellationToken ct)
     {
         var rawToken = Request.Cookies["refresh_token"];

@@ -6,10 +6,12 @@ using Library.Application;
 using Library.Infrastructure;
 using Library.Infrastructure.Context;
 using Library.WebAPI.Middlewares;
+using Library.WebAPI.OpenApi;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,11 +26,15 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddFeatureManagement(); // feature service
 
 // 📦 OData + Controllers
 builder.Services.AddControllers()
     .AddOData(opt => opt.EnableQueryFeatures())
-    .AddJsonOptions(opt => { opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; });
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    }); // Feature Management için
 
 // 🛡️ Rate Limit
 builder.Services.AddRateLimiter(options =>
@@ -44,7 +50,10 @@ builder.Services.AddRateLimiter(options =>
 
 // 🔍 Scalar + OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi(); // Scalar için mutlaka lazım
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<FeatureGateTransformer>();
+}); // Scalar için mutlaka lazım
 
 // 🩺 HealthChecks
 builder.Services.AddHealthChecks()
