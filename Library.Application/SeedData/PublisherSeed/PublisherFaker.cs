@@ -1,9 +1,10 @@
-namespace Library.Application.SeedData.PublisherSeed;
-
 using Bogus;
 using Library.Application.Features.Publishers.Commands.Add;
 
-public static class PublisherFaker{
+namespace Library.Application.SeedData.PublisherSeed;
+
+public static class PublisherFaker
+{
     // Örnek yayınevleri listesi
     private static readonly IReadOnlyList<(string Name, string Country)> Publishers = new[]
     {
@@ -47,10 +48,14 @@ public static class PublisherFaker{
     }
 
     public static List<AddPublisherCommand> Generate(int count = 50)
-        => GetFaker().Generate(count);
+    {
+        return GetFaker().Generate(count);
+    }
 
     private static string Truncate(string value, int maxLength)
-        => string.IsNullOrEmpty(value) || value.Length <= maxLength
+    {
+        return string.IsNullOrEmpty(value) || value.Length <= maxLength
             ? value
             : value[..maxLength];
+    }
 }

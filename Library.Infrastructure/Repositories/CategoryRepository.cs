@@ -5,4 +5,5 @@ using Library.Infrastructure.Persistence.Repositories;
 
 namespace Library.Infrastructure.Repositories;
 
-internal sealed class CategoryRepository(ApplicationDbContext context): ExtendedRepository<Category>(context), ICategoryRepository;
+internal sealed class CategoryRepository(ApplicationDbContext context)
+    : ExtendedRepository<Category>(context), ICategoryRepository;

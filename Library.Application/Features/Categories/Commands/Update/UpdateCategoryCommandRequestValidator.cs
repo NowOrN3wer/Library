@@ -9,7 +9,7 @@ public class UpdateCategoryCommandRequestValidator : AbstractValidator<UpdateCat
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("Id boş veya geçersiz olamaz.");
-        
+
         RuleFor(x => x.Name)
             .Must(name => !string.IsNullOrWhiteSpace(name))
             .WithMessage("İsim alanı boş olamaz.")

@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Library.Application.Features.Books.Commands.Add;
 
-public class AddBookCommandValidator :AbstractValidator<AddBookCommand>
+public class AddBookCommandValidator : AbstractValidator<AddBookCommand>
 {
     public AddBookCommandValidator()
     {

@@ -1,9 +1,9 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
 using Library.Application.Behaviors;
 using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Library.Application;
 

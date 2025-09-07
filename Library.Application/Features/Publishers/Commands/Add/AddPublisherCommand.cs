@@ -1,7 +1,6 @@
 using MediatR;
 using TS.Result;
 
-
 namespace Library.Application.Features.Publishers.Commands.Add;
 
 public sealed record AddPublisherCommand : IRequest<Result<bool>>

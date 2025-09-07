@@ -14,18 +14,22 @@ internal sealed class GetPageBookQueryHandler(IBookRepository repository)
     : IRequestHandler<GetPageBookQuery, Result<BasePageResponseDto<BookDto>>>
 {
     public async Task<Result<BasePageResponseDto<BookDto>>> Handle(
-        GetPageBookQuery request, 
+        GetPageBookQuery request,
         CancellationToken cancellationToken)
     {
         // 1) Filtreler (stringlerde Contains, sayısal/tarihte eşitlik)
-        var writerFirstNameFilter    = QueryExpressionBuilder.BuildContainsFilter<Book>(request.WriterName,    b => b.Writer.FirstName);
-        var writerLastNameFilter    = QueryExpressionBuilder.BuildContainsFilter<Book>(request.WriterName,    b => b.Writer.LastName);
-        var categoryFilter  = QueryExpressionBuilder.BuildContainsFilter<Book>(request.CategoryName,  b => b.Category.Name);
-        var publisherFilter = QueryExpressionBuilder.BuildContainsFilter<Book>(request.PublisherName, b => b.Publisher.Name);
-        var titleFilter     = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Title,         b => b.Title);
-        var summaryFilter   = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Summary,       b => b.Summary);
-        var isbnFilter      = QueryExpressionBuilder.BuildContainsFilter<Book>(request.ISBN,          b => b.ISBN);
-        var langFilter      = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Language,      b => b.Language);
+        var writerFirstNameFilter =
+            QueryExpressionBuilder.BuildContainsFilter<Book>(request.WriterName, b => b.Writer.FirstName);
+        var writerLastNameFilter =
+            QueryExpressionBuilder.BuildContainsFilter<Book>(request.WriterName, b => b.Writer.LastName);
+        var categoryFilter =
+            QueryExpressionBuilder.BuildContainsFilter<Book>(request.CategoryName, b => b.Category.Name);
+        var publisherFilter =
+            QueryExpressionBuilder.BuildContainsFilter<Book>(request.PublisherName, b => b.Publisher.Name);
+        var titleFilter = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Title, b => b.Title);
+        var summaryFilter = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Summary, b => b.Summary);
+        var isbnFilter = QueryExpressionBuilder.BuildContainsFilter<Book>(request.ISBN, b => b.ISBN);
+        var langFilter = QueryExpressionBuilder.BuildContainsFilter<Book>(request.Language, b => b.Language);
 
         // Eşitlik bazlı (varsa uygula)
         Expression<Func<Book, bool>> pageCountFilter = b => true;
@@ -50,29 +54,29 @@ internal sealed class GetPageBookQueryHandler(IBookRepository repository)
         // 2) Sıralama map'i
         var orderMap = new Dictionary<string, Expression<Func<Book, object>>>(StringComparer.OrdinalIgnoreCase)
         {
-            ["writerName"]    = b => b.Writer.FullName,
-            ["categoryName"]  = b => b.Category.Name,
+            ["writerName"] = b => b.Writer.FullName,
+            ["categoryName"] = b => b.Category.Name,
             ["publisherName"] = b => b.Publisher.Name,
-            ["title"]         = b => b.Title,
-            ["isbn"]          = b => b.ISBN ?? string.Empty,
-            ["language"]      = b => b.Language ?? string.Empty,
-            ["pageCount"]     = b => b.PageCount ?? 0,
+            ["title"] = b => b.Title,
+            ["isbn"] = b => b.ISBN ?? string.Empty,
+            ["language"] = b => b.Language ?? string.Empty,
+            ["pageCount"] = b => b.PageCount ?? 0,
             ["publishedDate"] = b => b.PublishedDate ?? DateTimeOffset.MinValue,
-            ["id"]            = b => b.Id
+            ["id"] = b => b.Id
         };
 
         var orderByExpr = QueryExpressionBuilder.BuildOrderBy(
-            request.OrderByField, orderMap, defaultKey: "id");
+            request.OrderByField, orderMap, "id");
 
         // 3) Projection'lı paging çağrısı (DTO doğrudan seçiliyor)
         var (items, totalCount) = await repository.GetPagedAsync(
-            pageNumber:   request.PageNumber,
-            pageSize:     request.PageSize,
-            filter:       finalFilter,
-            orderBy:      orderByExpr,
-            isDescending: !request.OrderByAsc,
-            getAllData:   request.GetAllData,
-            selector:     b => new BookDto(
+            request.PageNumber,
+            request.PageSize,
+            finalFilter,
+            orderByExpr,
+            !request.OrderByAsc,
+            request.GetAllData,
+            b => new BookDto(
                 b.WriterId,
                 b.Writer.FullName,
                 b.CategoryId,
@@ -87,26 +91,26 @@ internal sealed class GetPageBookQueryHandler(IBookRepository repository)
                 b.PublishedDate
             )
             {
-                Id        = b.Id,
-                Version   = b.Version,
+                Id = b.Id,
+                Version = b.Version,
                 CreatedAt = b.CreatedAt,
                 UpdatedAt = b.UpdatedAt,
                 CreatedBy = b.CreatedBy,
                 UpdatedBy = b.UpdatedBy
             },
-            cancellationToken: cancellationToken
+            cancellationToken
         );
 
         // 4) Sayfalı cevap
         var result = new BasePageResponseDto<BookDto>
         {
-            List         = items.ToList(),
-            TotalCount   = totalCount,
-            PageNumber   = request.PageNumber,
-            PageSize     = request.PageSize,
+            List = items.ToList(),
+            TotalCount = totalCount,
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize,
             OrderByField = request.OrderByField,
-            OrderByAsc   = request.OrderByAsc,
-            GetAllData   = request.GetAllData
+            OrderByAsc = request.OrderByAsc,
+            GetAllData = request.GetAllData
         };
 
         return result;

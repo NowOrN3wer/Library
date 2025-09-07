@@ -12,17 +12,13 @@ internal static class GetPageCategoryQueryExpressionBuilder
         Expression<Func<Category, bool>> predicate = w => true;
 
         if (!string.IsNullOrWhiteSpace(request.Name))
-        {
             predicate = predicate.And(x =>
                 EF.Functions.ILike(x.Name, $"%{request.Name}%"));
-        }
 
         if (!string.IsNullOrWhiteSpace(request.Description))
-        {
             predicate = predicate.And(x => x.Description != null &&
                                            EF.Functions.Like(x.Description.ToLower(),
                                                $"%{request.Description.ToLower()}%"));
-        }
 
         return predicate;
     }

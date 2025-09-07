@@ -1,5 +1,5 @@
-﻿using Bogus;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Bogus;
 using Library.Application.Features.Writers.Commands.Add;
 
 namespace Library.Application.SeedData.WriterSeed;
@@ -29,14 +29,9 @@ public static class WriterFaker
                 var nation = f.Address.Country();
                 return string.IsNullOrWhiteSpace(nation) ? "Unknown" : Truncate(nation, 100);
             })
-            .RuleFor(w => w.BirthDate, f =>
-            {
-                return f.Date.PastOffset(80, DateTimeOffset.UtcNow.AddYears(-20));
-            })
-            .RuleFor(w => w.DeathDate, (f, w) =>
-            {
-                return f.Random.Bool() ? w.BirthDate?.AddYears(f.Random.Int(40, 80)) : null;
-            })
+            .RuleFor(w => w.BirthDate, f => { return f.Date.PastOffset(80, DateTimeOffset.UtcNow.AddYears(-20)); })
+            .RuleFor(w => w.DeathDate,
+                (f, w) => { return f.Random.Bool() ? w.BirthDate?.AddYears(f.Random.Int(40, 80)) : null; })
             .RuleFor(w => w.Website, f =>
             {
                 var url = f.Internet.UrlWithPath("https");

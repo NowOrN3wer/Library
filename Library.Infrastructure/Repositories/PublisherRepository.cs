@@ -5,4 +5,5 @@ using Library.Infrastructure.Persistence.Repositories;
 
 namespace Library.Infrastructure.Repositories;
 
-internal sealed class PublisherRepository(ApplicationDbContext context): ExtendedRepository<Publisher>(context), IPublisherRepository;
+internal sealed class PublisherRepository(ApplicationDbContext context)
+    : ExtendedRepository<Publisher>(context), IPublisherRepository;

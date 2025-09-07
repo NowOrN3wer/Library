@@ -7,9 +7,9 @@ namespace Library.Application.Common.Expressions;
 public static class QueryExpressionBuilder
 {
     /// <summary>
-    /// text doluysa, verilen string selector(ler) üzerinde ILIKE '%text%' OR birleştirerek filtre üretir.
-    /// Nullable alanları predicate dışı bırakır (x.Prop != null && ILIKE(...)).
-    /// text null/boşsa "true" döner (no-op).
+    ///     text doluysa, verilen string selector(ler) üzerinde ILIKE '%text%' OR birleştirerek filtre üretir.
+    ///     Nullable alanları predicate dışı bırakır (x.Prop != null && ILIKE(...)).
+    ///     text null/boşsa "true" döner (no-op).
     /// </summary>
     public static Expression<Func<T, bool>> BuildContainsFilter<T>(
         string? text,
@@ -38,7 +38,7 @@ public static class QueryExpressionBuilder
     }
 
     /// <summary>
-    /// Alan adına göre tip-güvenli OrderBy seçer. Eşleşme yoksa defaultKey döner.
+    ///     Alan adına göre tip-güvenli OrderBy seçer. Eşleşme yoksa defaultKey döner.
     /// </summary>
     public static Expression<Func<T, object>> BuildOrderBy<T>(
         string? fieldName,
@@ -51,6 +51,7 @@ public static class QueryExpressionBuilder
             if (map.TryGetValue(key, out var expr))
                 return expr;
         }
+
         return map[defaultKey];
     }
 }

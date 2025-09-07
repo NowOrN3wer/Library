@@ -49,8 +49,8 @@ public sealed class WriterController(IMediator mediator) : ApiController(mediato
     {
         var response = await Mediator.Send(new GetByIdWriterQuery(id), cancellationToken);
         return StatusCode(response.StatusCode, response);
-    }    
-    
+    }
+
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -59,7 +59,8 @@ public sealed class WriterController(IMediator mediator) : ApiController(mediato
     }
 
     [HttpPost]
-    public async Task<IActionResult> Lookup([FromBody] GetWriterLookupQuery request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Lookup([FromBody] GetWriterLookupQuery request,
+        CancellationToken cancellationToken)
     {
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);

@@ -15,17 +15,17 @@ internal sealed class GetCategoryLookupQueryHandler(ILookupService lookup)
     {
         Expression<Func<Category, Guid>> idSel = c => c.Id;
         Expression<Func<Category, string>> txtSel =
-            w => (w.Name ?? "");
+            w => w.Name ?? "";
 
         var resp = await lookup.ForAsync<Category, Guid>(
-            q:          request.Q,
-            limit:      request.Limit,
-            includeIds: request.IncludeIds,
-            cursor:     request.Cursor,
-            idSelector: idSel,
-            textSelector: txtSel,
-            baseFilter: null,
-            ct:         cancellationToken);
+            request.Q,
+            request.Limit,
+            request.IncludeIds,
+            request.Cursor,
+            idSel,
+            txtSel,
+            null,
+            cancellationToken);
 
         return Result<LookupResponseDto<Guid>>.Succeed(resp);
     }

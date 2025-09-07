@@ -5,5 +5,5 @@ using Library.Infrastructure.Persistence.Repositories;
 
 namespace Library.Infrastructure.Repositories;
 
-internal sealed class WriterRepository(ApplicationDbContext context): ExtendedRepository<Writer>(context), IWriterRepository;
-
+internal sealed class WriterRepository(ApplicationDbContext context)
+    : ExtendedRepository<Writer>(context), IWriterRepository;

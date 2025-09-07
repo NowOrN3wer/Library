@@ -11,4 +11,3 @@ public sealed record GetPagePublisherQuery(
     string? Address,
     string? Country)
     : BasePageRequestDto, IRequest<Result<BasePageResponseDto<PublisherDto>>>;
-    

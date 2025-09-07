@@ -1,11 +1,11 @@
-﻿using GenericRepository;
+﻿using System.Runtime.InteropServices;
+using GenericRepository;
 using Library.Domain.Abstractions;
 using Library.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 
 namespace Library.Infrastructure.Context;
 
@@ -26,6 +26,19 @@ public sealed class ApplicationDbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
+
+    public override int SaveChanges()
+    {
+        UpdateVersionAndTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateVersionAndTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -62,7 +75,7 @@ public sealed class ApplicationDbContext
             .WithMany(w => w.Books)
             .HasForeignKey(b => b.WriterId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.Entity<Book>()
             .HasIndex(b => b.PublisherId);
 
@@ -81,18 +94,6 @@ public sealed class ApplicationDbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 
-    public override int SaveChanges()
-    {
-        UpdateVersionAndTimestamps();
-        return base.SaveChanges();
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        UpdateVersionAndTimestamps();
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
     private void UpdateVersionAndTimestamps()
     {
         var userName =
@@ -103,7 +104,6 @@ public sealed class ApplicationDbContext
         var entries = ChangeTracker.Entries<Entity>();
 
         foreach (var entry in entries)
-        {
             if (entry.State == EntityState.Modified)
             {
                 entry.Entity.Version += 1;
@@ -115,9 +115,8 @@ public sealed class ApplicationDbContext
                 entry.Entity.CreatedAt = GetTurkeyTime().ToUniversalTime();
                 entry.Entity.CreatedBy = userName;
             }
-        }
     }
-    
+
     private static DateTimeOffset GetTurkeyTime()
     {
         var timeZoneId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
@@ -127,5 +126,4 @@ public sealed class ApplicationDbContext
         var tz = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
         return TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, tz);
     }
-
 }

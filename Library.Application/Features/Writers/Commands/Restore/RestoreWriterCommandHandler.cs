@@ -1,5 +1,4 @@
 ﻿using Library.Application.Common.Interfaces;
-using Library.Application.Features.Writers.Commands.Update;
 using Library.Domain.Enums;
 using Library.Domain.Repositories;
 using MediatR;
@@ -17,9 +16,7 @@ internal sealed class RestoreWriterCommandHandler(
         var validationResult = await validator.ValidateAsync(request);
 
         if (!validationResult.IsSuccessful || validationResult.Data is null)
-        {
             return Result<bool>.Failure(validationResult.ErrorMessages ?? []);
-        }
 
         var writer = validationResult.Data;
         writer.IsDeleted = EntityStatus.ACTIVE;

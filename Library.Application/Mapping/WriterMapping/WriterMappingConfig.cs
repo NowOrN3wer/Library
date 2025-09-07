@@ -32,16 +32,16 @@ internal sealed class WriterMappingConfig : IRegister
 
         // EntityDto → Entity
         config.NewConfig<WriterDto, Writer>()
-              .Map(dest => dest.Id, src => src.Id)
-              .Map(dest => dest.FirstName, src => src.FirstName)
-              .Map(dest => dest.LastName, src => src.LastName)
-              .Map(dest => dest.Biography, src => src.Biography)
-              .Map(dest => dest.Nationality, src => src.Nationality)
-              .Map(dest => dest.BirthDate, src => src.BirthDate)
-              .Map(dest => dest.DeathDate, src => src.DeathDate)
-              .Map(dest => dest.Website, src => src.Website)
-              .Map(dest => dest.Email, src => src.Email);
-        
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.FirstName, src => src.FirstName)
+            .Map(dest => dest.LastName, src => src.LastName)
+            .Map(dest => dest.Biography, src => src.Biography)
+            .Map(dest => dest.Nationality, src => src.Nationality)
+            .Map(dest => dest.BirthDate, src => src.BirthDate)
+            .Map(dest => dest.DeathDate, src => src.DeathDate)
+            .Map(dest => dest.Website, src => src.Website)
+            .Map(dest => dest.Email, src => src.Email);
+
         // Request → Entity
         config.NewConfig<AddWriterCommand, Writer>()
             .Map(dest => dest.FirstName, src => src.FirstName)
@@ -52,6 +52,5 @@ internal sealed class WriterMappingConfig : IRegister
             .Map(dest => dest.DeathDate, src => src.DeathDate)
             .Map(dest => dest.Website, src => src.Website)
             .Map(dest => dest.Email, src => src.Email);
-
     }
 }

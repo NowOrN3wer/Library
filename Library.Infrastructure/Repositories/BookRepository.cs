@@ -5,4 +5,4 @@ using Library.Infrastructure.Persistence.Repositories;
 
 namespace Library.Infrastructure.Repositories;
 
-internal sealed class  BookRepository(ApplicationDbContext context): ExtendedRepository<Book>(context), IBookRepository;
+internal sealed class BookRepository(ApplicationDbContext context) : ExtendedRepository<Book>(context), IBookRepository;

@@ -63,16 +63,24 @@ public class UnitOfWorkWithTransaction(ApplicationDbContext context)
     }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => context.SaveChangesAsync(cancellationToken);
+    {
+        return context.SaveChangesAsync(cancellationToken);
+    }
 
     public int SaveChanges()
-        => context.SaveChanges();
+    {
+        return context.SaveChanges();
+    }
 
     public async Task<bool> SaveChangesAndReturnSuccessAsync(CancellationToken cancellationToken = default)
-        => await SaveChangesAsync(cancellationToken) > 0;
+    {
+        return await SaveChangesAsync(cancellationToken) > 0;
+    }
 
     public async Task<Result<bool>> SaveChangesAsResultAsync(CancellationToken cancellationToken = default)
-        => (await SaveChangesAsync(cancellationToken) > 0)
+    {
+        return (await SaveChangesAsync(cancellationToken) > 0)
             ? Result<bool>.Succeed(true)
             : Result<bool>.Failure("Değişiklik kaydedilemedi.");
+    }
 }

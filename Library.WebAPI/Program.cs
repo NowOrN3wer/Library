@@ -1,4 +1,6 @@
-﻿using DefaultCorsPolicyNugetPackage;
+﻿using System.Text.Json;
+using System.Threading.RateLimiting;
+using DefaultCorsPolicyNugetPackage;
 using HealthChecks.UI.Client;
 using Library.Application;
 using Library.Infrastructure;
@@ -7,12 +9,8 @@ using Library.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
-using System.Text.Json;
-using System.Threading.RateLimiting;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +28,7 @@ builder.Services.AddProblemDetails();
 // 📦 OData + Controllers
 builder.Services.AddControllers()
     .AddOData(opt => opt.EnableQueryFeatures())
-    .AddJsonOptions(opt =>
-    {
-        opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    });
+    .AddJsonOptions(opt => { opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; });
 
 // 🛡️ Rate Limit
 builder.Services.AddRateLimiter(options =>
@@ -55,10 +50,8 @@ builder.Services.AddOpenApi(); // Scalar için mutlaka lazım
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>("PostgreSQL", HealthStatus.Unhealthy);
 
-builder.Services.AddHealthChecksUI(setup =>
-{
-    setup.AddHealthCheckEndpoint("Library API", "/health-check");
-}).AddInMemoryStorage();
+builder.Services.AddHealthChecksUI(setup => { setup.AddHealthCheckEndpoint("Library API", "/health-check"); })
+    .AddInMemoryStorage();
 
 // 📦 APM middleware'i → bunu AddControllers’dan önce değil, sonra koyabilirsin
 //builder.Services.AddElasticApm();
@@ -76,8 +69,8 @@ var app = builder.Build();
 // 🧪 DevTools
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();             // ➜ /openapi.json
-    app.MapScalarApiReference();  // ➜ /reference
+    app.MapOpenApi(); // ➜ /openapi.json
+    app.MapScalarApiReference(); // ➜ /reference
 }
 
 //// ✅ Scalar çalışabilmesi için en az bir endpoint tanımı
@@ -96,8 +89,8 @@ app.UseRateLimiter();
 app.UseExceptionHandler();
 
 app.MapControllers()
-   .RequireAuthorization()
-   .RequireRateLimiting("fixed");
+    .RequireAuthorization()
+    .RequireRateLimiting("fixed");
 
 // 🩺 HealthCheck endpoints
 app.MapHealthChecks("/health-check", new HealthCheckOptions

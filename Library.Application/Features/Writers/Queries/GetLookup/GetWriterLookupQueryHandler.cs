@@ -14,21 +14,21 @@ internal sealed class GetWriterLookupQueryHandler(ILookupService lookup)
     public async Task<Result<LookupResponseDto<Guid>>> Handle(
         GetWriterLookupQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Writer, Guid>> idSel   = w => w.Id;
+        Expression<Func<Writer, Guid>> idSel = w => w.Id;
         Expression<Func<Writer, string>> txtSel =
             w => (w.FirstName ?? "") + " " + (w.LastName ?? "");
         Expression<Func<Writer, bool>> baseFilter =
             w => w.IsDeleted != EntityStatus.DELETED;
 
         var resp = await lookup.ForAsync<Writer, Guid>(
-            q:          request.Q,
-            limit:      request.Limit,
-            includeIds: request.IncludeIds,
-            cursor:     request.Cursor,        // 👈 cursor eklendi
-            idSelector: idSel,
-            textSelector: txtSel,
-            baseFilter: baseFilter,
-            ct:         cancellationToken);
+            request.Q,
+            request.Limit,
+            request.IncludeIds,
+            request.Cursor, // 👈 cursor eklendi
+            idSel,
+            txtSel,
+            baseFilter,
+            cancellationToken);
 
         return Result<LookupResponseDto<Guid>>.Succeed(resp);
     }

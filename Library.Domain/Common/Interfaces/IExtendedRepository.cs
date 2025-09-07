@@ -13,7 +13,7 @@ public interface IExtendedRepository<T> : IRepository<T> where T : class
         bool isDescending = false,
         bool getAllData = false,
         params Expression<Func<T, object>>[] includes);
-    
+
     Task<(IEnumerable<TResult> items, int totalCount)> GetPagedAsync<TResult>(
         int pageNumber,
         int pageSize,

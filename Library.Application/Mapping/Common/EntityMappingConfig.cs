@@ -27,4 +27,3 @@ internal sealed class EntityMappingConfig : IRegister
             .Map(dest => dest.UpdatedAt, src => src.UpdatedAt);
     }
 }
-

@@ -10,6 +10,8 @@ internal sealed class RestoreWriterCommandDomainValidator(IWriterRepository repo
     : BaseEntityStateValidator<Writer>(repository) // <- burada parametre *türetilmiş sınıfın* ctor’una gider
 {
     public Task<Result<Writer>> ValidateAsync(RestoreWriterCommand request, CancellationToken ct = default)
-        => EnsureStateAsync(request.Id, EntityStatus.DELETED, 
+    {
+        return EnsureStateAsync(request.Id, EntityStatus.DELETED,
             "Writer is already active and cannot be restored.", ct);
+    }
 }

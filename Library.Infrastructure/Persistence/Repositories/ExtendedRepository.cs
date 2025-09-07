@@ -31,15 +31,13 @@ public class ExtendedRepository<T>(ApplicationDbContext context)
         if (filter is not null) query = query.Where(filter);
 
         if (includes is not null && includes.Length > 0)
-        {
             query = includes.Aggregate(query, (current, include) => current.Include(include));
-        }
 
         if (orderBy is not null)
             query = isDescending
                 ? query.OrderByDescending(orderBy)
                 : query.OrderBy(orderBy);
-        
+
         var totalCount = await query.CountAsync();
 
         if (getAllData)
@@ -56,7 +54,7 @@ public class ExtendedRepository<T>(ApplicationDbContext context)
 
         return (items, totalCount);
     }
-    
+
     // --- YENİ METOD: Projection'lı paging (Include YOK!) ---
     public async Task<(IEnumerable<TResult> items, int totalCount)> GetPagedAsync<TResult>(
         int pageNumber,
@@ -88,7 +86,7 @@ public class ExtendedRepository<T>(ApplicationDbContext context)
         if (getAllData)
         {
             var allItems = await query
-                .Select(selector)      // <-- DB-side projection
+                .Select(selector) // <-- DB-side projection
                 .ToListAsync(cancellationToken);
 
             return (allItems, totalCount);
@@ -97,7 +95,7 @@ public class ExtendedRepository<T>(ApplicationDbContext context)
         var items = await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(selector)          // <-- DB-side projection
+            .Select(selector) // <-- DB-side projection
             .ToListAsync(cancellationToken);
 
         return (items, totalCount);

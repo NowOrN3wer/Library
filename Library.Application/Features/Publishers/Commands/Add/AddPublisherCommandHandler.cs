@@ -1,5 +1,4 @@
 using Library.Application.Common.Interfaces;
-using Library.Application.SeedData.PublisherSeed;
 using Library.Domain.Entities;
 using Library.Domain.Repositories;
 using Mapster;
