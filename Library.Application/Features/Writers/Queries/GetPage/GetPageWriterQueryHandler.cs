@@ -17,12 +17,12 @@ internal sealed class GetPageWriterQueryHandler(
         var orderByExpression = GetPageWriterQueryExpressionBuilder.BuildOrderBy(request.OrderByField);
 
         var (items, totalCount) = await repository.GetPagedAsync(
-            pageNumber: request.PageNumber,
-            pageSize: request.PageSize,
-            filter: filterExpression,
-            orderBy: orderByExpression,
-            isDescending: !request.OrderByAsc,
-            getAllData: request.GetAllData
+            request.PageNumber,
+            request.PageSize,
+            filterExpression,
+            orderByExpression,
+            !request.OrderByAsc,
+            request.GetAllData
         );
 
         var resultItems = items.Adapt<List<WriterDto>>();

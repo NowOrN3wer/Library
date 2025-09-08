@@ -61,10 +61,14 @@ public static class CategoryFaker
     }
 
     public static List<AddCategoryCommand> Generate(int count = 50)
-        => GetFaker().Generate(count);
+    {
+        return GetFaker().Generate(count);
+    }
 
     private static string Truncate(string value, int maxLength)
-        => string.IsNullOrEmpty(value) || value.Length <= maxLength
+    {
+        return string.IsNullOrEmpty(value) || value.Length <= maxLength
             ? value
             : value[..maxLength];
+    }
 }

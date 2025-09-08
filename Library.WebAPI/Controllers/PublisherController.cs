@@ -16,7 +16,7 @@ public sealed class PublisherController(IMediator mediator) : ApiController(medi
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> GetPage([FromBody] GetPagePublisherQuery request,
         CancellationToken cancellationToken)

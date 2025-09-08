@@ -12,8 +12,7 @@ public class BookMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        
-                // ---------------------------
+        // ---------------------------
         // Entity -> BookDto (flat)
         // BookDto ctor imzası:
         // (Guid writerId, string writerName, Guid categoryId, string categoryName,
@@ -23,11 +22,11 @@ public class BookMappingConfig : IRegister
         config.NewConfig<Book, BookDto>()
             .ConstructUsing(src => new BookDto(
                 src.WriterId,
-                src.Writer != null ? src.Writer.FullName : string.Empty,          // WriterName
+                src.Writer != null ? src.Writer.FullName : string.Empty, // WriterName
                 src.CategoryId,
-                src.Category != null ? src.Category.Name : string.Empty,      // CategoryName
+                src.Category != null ? src.Category.Name : string.Empty, // CategoryName
                 src.PublisherId,
-                src.Publisher != null ? src.Publisher.Name : string.Empty,    // PublisherName
+                src.Publisher != null ? src.Publisher.Name : string.Empty, // PublisherName
                 src.Title,
                 src.Summary,
                 src.ISBN,
@@ -36,8 +35,8 @@ public class BookMappingConfig : IRegister
                 src.PublishedDate
             ))
             // Base EntityDto alanları
-            .Map(dest => dest.Id,        src => src.Id)
-            .Map(dest => dest.Version,   src => src.Version)
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Version, src => src.Version)
             .Map(dest => dest.CreatedAt, src => src.CreatedAt)
             .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
             .Map(dest => dest.CreatedBy, src => src.CreatedBy)
@@ -62,8 +61,8 @@ public class BookMappingConfig : IRegister
                 src.PublishedDate
             ))
             // Base EntityDto alanları
-            .Map(dest => dest.Id,        src => src.Id)
-            .Map(dest => dest.Version,   src => src.Version)
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Version, src => src.Version)
             .Map(dest => dest.CreatedAt, src => src.CreatedAt)
             .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
             .Map(dest => dest.CreatedBy, src => src.CreatedBy)
@@ -74,31 +73,31 @@ public class BookMappingConfig : IRegister
         // ---------------------------
         config.NewConfig<BookDto, Book>()
             // Kimlik & audit alanları
-            .Map(dest => dest.Id,        src => src.Id)
-            .Map(dest => dest.Version,   src => src.Version)
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Version, src => src.Version)
             .Map(dest => dest.CreatedAt, src => src.CreatedAt)
             .Map(dest => dest.UpdatedAt, src => src.UpdatedAt)
             .Map(dest => dest.CreatedBy, src => src.CreatedBy)
             .Map(dest => dest.UpdatedBy, src => src.UpdatedBy)
 
             // Asıl alanlar
-            .Map(dest => dest.Title,         src => src.Title)
-            .Map(dest => dest.Summary,       src => src.Summary)
-            .Map(dest => dest.ISBN,          src => src.ISBN)
-            .Map(dest => dest.Language,      src => src.Language)
-            .Map(dest => dest.PageCount,     src => src.PageCount)
+            .Map(dest => dest.Title, src => src.Title)
+            .Map(dest => dest.Summary, src => src.Summary)
+            .Map(dest => dest.ISBN, src => src.ISBN)
+            .Map(dest => dest.Language, src => src.Language)
+            .Map(dest => dest.PageCount, src => src.PageCount)
             .Map(dest => dest.PublishedDate, src => src.PublishedDate)
 
             // İlişkiler (FK'lar)
-            .Map(dest => dest.WriterId,    src => src.WriterId)
-            .Map(dest => dest.CategoryId,  src => src.CategoryId)
+            .Map(dest => dest.WriterId, src => src.WriterId)
+            .Map(dest => dest.CategoryId, src => src.CategoryId)
             .Map(dest => dest.PublisherId, src => src.PublisherId)
 
             // Navigation'ları EF yönetsin
             .Ignore(dest => dest.Writer)
             .Ignore(dest => dest.Category)
             .Ignore(dest => dest.Publisher);
-        
+
         // Request → Entity
         config.NewConfig<AddBookCommand, Book>()
             // Asıl alanlar

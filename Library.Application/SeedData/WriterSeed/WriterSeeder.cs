@@ -11,8 +11,8 @@ public class WriterSeeder(
 {
     public void SeedData()
     {
-        int total = 1_000;
-        int batchSize = 1000;
+        var total = 1_000;
+        var batchSize = 1000;
         var faker = WriterFaker.GetFaker(); // Faker<WriterDto>
 
         for (var i = 0; i < total / batchSize; i++)

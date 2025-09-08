@@ -16,9 +16,7 @@ internal sealed class DeleteWriterCommandHandler(
         var validationResult = await validator.ValidateAsync(request);
 
         if (!validationResult.IsSuccessful || validationResult.Data is null)
-        {
             return Result<bool>.Failure(validationResult.ErrorMessages ?? []);
-        }
 
         var writer = validationResult.Data;
         writer.IsDeleted = EntityStatus.DELETED;

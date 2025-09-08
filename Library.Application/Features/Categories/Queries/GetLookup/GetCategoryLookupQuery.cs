@@ -4,5 +4,4 @@ using TS.Result;
 
 namespace Library.Application.Features.Categories.Queries.GetLookup;
 
-public sealed record GetCategoryLookupQuery()
-    : LookupRequestDto<Guid>, IRequest<Result<LookupResponseDto<Guid>>>;
+public sealed record GetCategoryLookupQuery : LookupRequestDto<Guid>, IRequest<Result<LookupResponseDto<Guid>>>;

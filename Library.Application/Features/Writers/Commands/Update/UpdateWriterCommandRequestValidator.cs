@@ -9,7 +9,7 @@ internal sealed class UpdateWriterCommandRequestValidator : AbstractValidator<Up
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("Id boş veya geçersiz olamaz.");
-        
+
         RuleFor(x => x.FirstName)
             .Must(name => !string.IsNullOrWhiteSpace(name))
             .WithMessage("İsim alanı boş olamaz.")

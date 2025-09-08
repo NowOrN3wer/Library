@@ -8,7 +8,9 @@ namespace Library.Application.Common.Validators;
 public abstract class BaseEntityStateValidator<T> : BaseEntityByIdValidator<T>
     where T : Entity
 {
-    protected BaseEntityStateValidator(IExtendedRepository<T> repository) : base(repository) { }
+    protected BaseEntityStateValidator(IExtendedRepository<T> repository) : base(repository)
+    {
+    }
 
     protected async Task<Result<T>> EnsureStateAsync(
         Guid id,

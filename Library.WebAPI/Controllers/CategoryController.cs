@@ -37,7 +37,8 @@ public sealed class CategoryController(IMediator mediator) : ApiController(media
     }
 
     [HttpPost]
-    public async Task<IActionResult> Lookup([FromBody] GetCategoryLookupQuery request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Lookup([FromBody] GetCategoryLookupQuery request,
+        CancellationToken cancellationToken)
     {
         var response = await Mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);

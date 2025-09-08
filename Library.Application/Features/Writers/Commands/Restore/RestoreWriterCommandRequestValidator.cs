@@ -2,7 +2,7 @@
 
 namespace Library.Application.Features.Writers.Commands.Restore;
 
-internal sealed class RestoreWriterCommandRequestValidator: AbstractValidator<RestoreWriterCommand>
+internal sealed class RestoreWriterCommandRequestValidator : AbstractValidator<RestoreWriterCommand>
 {
     public RestoreWriterCommandRequestValidator()
     {

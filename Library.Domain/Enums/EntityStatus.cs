@@ -3,7 +3,7 @@
 public enum EntityStatus
 {
     DELETED = 0,
-    ACTIVE = 1,
+    ACTIVE = 1
 }
 
 public static class EnumRecordDeletedExtensions

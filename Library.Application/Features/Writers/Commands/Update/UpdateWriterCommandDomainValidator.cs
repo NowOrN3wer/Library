@@ -5,7 +5,7 @@ using TS.Result;
 
 namespace Library.Application.Features.Writers.Commands.Update;
 
-internal sealed class UpdateWriterCommandDomainValidator(IWriterRepository repository)    
+internal sealed class UpdateWriterCommandDomainValidator(IWriterRepository repository)
     : BaseActiveEntityByIdValidator<Writer, UpdateWriterCommand>(repository)
 {
     public async Task<Result<Writer>> ValidateAsync(UpdateWriterCommand request)

@@ -11,8 +11,8 @@ public class PublisherSeeder(
 {
     public void SeedData()
     {
-        int total = 30;
-        int batchSize = 30;
+        var total = 30;
+        var batchSize = 30;
         var faker = PublisherFaker.GetFaker();
 
         for (var i = 0; i < total / batchSize; i++)
@@ -20,7 +20,7 @@ public class PublisherSeeder(
             var batch = Enumerable.Range(0, batchSize)
                 .Select(_ =>
                 {
-                    var dto = faker.Generate(); 
+                    var dto = faker.Generate();
                     return dto.Adapt<Publisher>();
                 })
                 .ToList();

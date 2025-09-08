@@ -5,6 +5,7 @@ using Library.Domain.Entities;
 using Library.Domain.Repositories;
 using Moq;
 using TS.Result;
+
 namespace Library.Test;
 
 public class WriterCommandsTests
@@ -84,21 +85,21 @@ public class WriterCommandsTests
     {
         // Arrange
         var repo = new Mock<IWriterRepository>(MockBehavior.Strict);
-        var uow  = new Mock<IUnitOfWorkWithTransaction>(MockBehavior.Strict);
+        var uow = new Mock<IUnitOfWorkWithTransaction>(MockBehavior.Strict);
 
         // Repository AddAsync çağrıldığında Writer özelliklerini doğruluyoruz
         repo.Setup(r => r.AddAsync(It.Is<Writer>(w =>
-                    w.FirstName == "Eric" &&
-                    w.LastName == "Evans" &&
-                    w.Nationality == "US"
-                ), It.IsAny<CancellationToken>()))
+                w.FirstName == "Eric" &&
+                w.LastName == "Evans" &&
+                w.Nationality == "US"
+            ), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         var succeed = Result<bool>.Succeed(true);
         succeed.StatusCode = 200;
 
         uow.Setup(u => u.SaveChangesAndReturnSuccessAsync(It.IsAny<CancellationToken>()))
-           .ReturnsAsync(true);
+            .ReturnsAsync(true);
 
         var handler = new AddWriterCommandHandler(repo.Object, uow.Object);
 
@@ -132,7 +133,7 @@ public class WriterCommandsTests
     {
         // Arrange
         var repo = new Mock<IWriterRepository>(MockBehavior.Strict);
-        var uow  = new Mock<IUnitOfWorkWithTransaction>(MockBehavior.Strict);
+        var uow = new Mock<IUnitOfWorkWithTransaction>(MockBehavior.Strict);
 
         repo.Setup(r => r.AddAsync(It.IsAny<Writer>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
@@ -149,7 +150,7 @@ public class WriterCommandsTests
         var result = await handler.Handle(cmd, CancellationToken.None);
 
         // Assert
-        Assert.False(result.Data);                                   // Başarısız olmalı
+        Assert.False(result.Data); // Başarısız olmalı
 
         repo.Verify(r => r.AddAsync(It.IsAny<Writer>(), It.IsAny<CancellationToken>()), Times.Once);
         uow.Verify(u => u.SaveChangesAndReturnSuccessAsync(It.IsAny<CancellationToken>()), Times.Once);

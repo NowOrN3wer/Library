@@ -11,8 +11,8 @@ public class CategorySeeder(
 {
     public void SeedData()
     {
-        int total = 30;
-        int batchSize = 30;
+        var total = 30;
+        var batchSize = 30;
         var faker = CategoryFaker.GetFaker(); // Faker<WriterDto>
 
         for (var i = 0; i < total / batchSize; i++)
