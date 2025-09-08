@@ -8,6 +8,7 @@ COPY Library.WebAPI/*.csproj ./Library.WebAPI/
 COPY Library.Application/*.csproj ./Library.Application/
 COPY Library.Infrastructure/*.csproj ./Library.Infrastructure/
 COPY Library.Domain/*.csproj ./Library.Domain/
+COPY Library.Test/*.csproj ./Library.Test/
 
 # Gerekli NuGet paketlerini indir
 RUN dotnet restore
