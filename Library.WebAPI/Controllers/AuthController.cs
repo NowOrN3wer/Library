@@ -1,4 +1,4 @@
-﻿using Library.Application.Features.Auth.Login;
+using Library.Application.Features.Auth.Login;
 using Library.Application.Features.Auth.Refresh;
 using Library.WebAPI.Abstractions;
 using MediatR;
@@ -27,7 +27,6 @@ public sealed class AuthController(IMediator mediator) : ApiController(mediator)
         return StatusCode(res.StatusCode, res);
     }
 
-    [FeatureGate("RefreshFromCookie")]
     [FeatureGate("RefreshFromCookie")]
     [AllowAnonymous]
     [HttpPost]
